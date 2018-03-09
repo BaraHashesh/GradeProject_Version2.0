@@ -2,6 +2,7 @@ package models;
 
 import java.io.*;
 import java.net.*;
+import java.util.Arrays;
 
 public class TCPClient {
 	public MyFile[] sendRequestBrowser(String path) {
@@ -43,6 +44,7 @@ public class TCPClient {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void downloadRequest(String path) {
 		String request;
 		try {
@@ -50,11 +52,31 @@ public class TCPClient {
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			request = "Download" + "\n" + path;
 			outToServer.writeBytes(request + '\n');
-			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			
-			for(String temp; (temp = inFromServer.readLine())!=null;)
-				System.out.println(temp);
-	
+			DataInputStream inFromServer = new DataInputStream(clientSocket.getInputStream());
+			for(String temp; (temp=inFromServer.readLine()) != null; ) {
+				MyFile myfile = JsonParser.singleJsonToMyFile(temp);
+				if(myfile.isDirectory()) {
+					File file = new File(myfile.getPath());
+					file.mkdirs();
+				}
+				else {
+					FileOutputStream output = new FileOutputStream(myfile.getPath());
+					long size = myfile.getSize();
+					byte[] buffer = new byte[1024];
+					while(size > 0) {
+						if(size >= buffer.length) {
+							inFromServer.read(buffer, 0, buffer.length);
+							output.write(buffer, 0, buffer.length);
+							size -= buffer.length;
+						}else {
+							inFromServer.read(buffer, 0, (int)size);
+							output.write(buffer, 0, (int)size);
+							size = 0 ;
+						}
+					}
+					output.close();
+				}
+			}
 			outToServer.close();
 			clientSocket.close();
 		}catch(Exception e) {

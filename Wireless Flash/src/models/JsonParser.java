@@ -45,7 +45,7 @@ public class JsonParser {
 	 * @param file is a MyFile object
 	 * @return json string containing MyFile object
 	 */
-	public static String myFileToJson(MyFile file){
+	public static String singleMyFileToJson(MyFile file){
 		try {
 			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 			String json = ow.writeValueAsString(file);
@@ -53,6 +53,22 @@ public class JsonParser {
 		}catch (Exception e) {
 			e.printStackTrace();
 			return "";
+		}
+	}
+	
+	/**
+	 * method used to convert json string into MyFile object
+	 * @param json is json string containing MyFile object
+	 * @return MyFile Object
+	 */
+	public static MyFile singleJsonToMyFile(String json){
+		try {
+			ObjectMapper om = new ObjectMapper();
+			MyFile file = om.readValue(json, MyFile.class);
+			return file;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

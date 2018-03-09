@@ -56,8 +56,9 @@ public class USBHandler{
 		myfile.setPath(myfile.getPath().replace(mainPath, ""));
 		if(myfile.getPath().startsWith("\\"))
 			myfile.setPath(myfile.getPath().replace("\\", ""));
-		String jsonFile = JsonParser.myFileToJson(myfile);
+		String jsonFile = JsonParser.singleMyFileToJson(myfile);
 		try {
+			jsonFile = jsonFile.replaceAll(""+((char)13)+((char)10), "");
 			outToClient.writeBytes(jsonFile+"\n");
 			if(file.isDirectory()) {
 				File[] list = file.listFiles();
