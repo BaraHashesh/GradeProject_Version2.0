@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--_MODULUS=zuon0hCdmPT9RzvaWLvqwGtUUONRW7r5QMFVksYhyYYV4/FDOjFCQ6T99nkDafbY8j4h2Qgan+W+8MTMDsC+8q88LCUEUQY1oAsatiWUtDoBl/6JwV/oDFASdkFOQgRc1Hpm0pBL+yx4dIrjYe0JYPCyXmeMlboEKN3soX8B/EE=-->
+<!--_SIG=STIhagg5iGR34HfbiA2TJt02yzAAyPE0j1jCadvjDzBV0t4ioGBYwZD1JgVUbaS0V2SQ2GDKVjt1Y/aJudSeMNcSu8RQtRjpPsP/N+5Nd29eCCLXLks9HuSObUF3gDTogCPhPtDcZB3g/MYtvZ/kb2jD4CVGQxKGKxIpULVEUYc=-->
+<Package Id="OfficeMUI.en-us" Type="MSI" Path="OfficeMUI.MSI" Version="1.0" ProductCode="{90150000-006E-0409-1000-0000000FF1CE}" MSIVersion="15.0.4420.1017" ProductLanguage="1033" Platform="x64">
+	<Feature Id="ProductNonBootFilesIntl_1033" Cost="6017112">
+		<OptionRef Id="ProductFiles"/>
+	</Feature>
+	<Feature Id="GraphicsFiltersGIFFilesIntl_1033" Cost="257205">
+		<OptionRef Id="GraphicsFiltersGIFFiles"/>
+	</Feature>
+	<Feature Id="UICaptionsCompanionIntl_1033" Cost="19554320">
+		<OptionRef Id="ProductFiles"/>
+	</Feature>
+	<Feature Id="ProductFilesIntl_1033" Cost="5897459">
+		<OptionRef Id="ProductFiles"/>
+	</Feature>
+	<Feature Id="MetricConverterIntl_1033" Cost="11463">
+		<OptionRef Id="MetricConverter"/>
+	</Feature>
+	<Feature Id="GraphicsFiltersWPGFilesIntl_1033" Cost="271366">
+		<OptionRef Id="GraphicsFiltersWPGFiles"/>
+	</Feature>
+	<Feature Id="VBAFilesIntl_1033" Cost="2310392">
+		<OptionRef Id="VBAFiles"/>
+	</Feature>
+	<Feature Id="GraphHelpFilesIntl_1033" Cost="611149">
+		<OptionRef Id="GraphHelpFiles"/>
+	</Feature>
+	<Feature Id="AceFilesIntl_1033" Cost="1114168">
+		<OptionRef Id="AceFiles"/>
+	</Feature>
+	<Feature Id="GraphicsFiltersEPSFilesIntl_1033" Cost="665459">
+		<OptionRef Id="GraphicsFiltersEPSFiles"/>
+	</Feature>
+	<Feature Id="VBAHelpFilesIntl_1033" Cost="3385320">
+		<OptionRef Id="VBAHelpFiles"/>
+	</Feature>
+	<Feature Id="VSTOCLR40Intl_1033" Cost="0">
+		<OptionRef Id="VSTOCLR40"/>
+	</Feature>
+	<Feature Id="MSTagPluginStockFilesIntl_1033" Cost="162976">
+		<OptionRef Id="MSTagPluginStockFiles"/>
+	</Feature>
+	<Feature Id="TCWP5FilesIntl_1033" Cost="474246">
+		<OptionRef Id="TCWP5Files"/>
+	</Feature>
+	<Feature Id="SetLanguageHelpFilesIntl_1033" Cost="142337">
+		<OptionRef Id="SetLanguageHelpFiles"/>
+	</Feature>
+	<Feature Id="SetLanguageFilesIntl_1033" Cost="9904">
+		<OptionRef Id="SetLanguageFiles"/>
+	</Feature>
+	<Feature Id="FirstRunFilesIntl_1033" Cost="14448">
+		<OptionRef Id="FirstRunFiles"/>
+	</Feature>
+	<Feature Id="SetupControllerFiles" Cost="805174">
+		<OptionRef Id="AlwaysInstalled"/>
+	</Feature>
+	<Feature Id="XDOCSEditorFilesIntl_1033" Cost="1256256">
+		<OptionRef Id="XDOCSEditorFiles"/>
+	</Feature>
+	<Feature Id="MSTagPluginDateFilesIntl_1033" Cost="17482">
+		<OptionRef Id="MSTagPluginDateFiles"/>
+	</Feature>
+	<Feature Id="WxpFilesIntl_1033" Cost="226941">
+		<OptionRef Id="AlwaysInstalled"/>
+	</Feature>
+	<Feature Id="AlwaysInstalledIntl_1033" Cost="421668">
+		<OptionRef Id="AlwaysInstalled"/>
+	</Feature>
+	<Feature Id="VisioPreviewerIntl_1033" Cost="844576">
+		<OptionRef Id="VisioPreviewerIntl"/>
+	</Feature>
+	<Feature Id="TCWP6FilesIntl_1033" Cost="573582">
+		<OptionRef Id="TCWP6Files"/>
+	</Feature>
+	<Feature Id="ClviewFilesIntl_1033" Cost="102072">
+		<OptionRef Id="AlwaysInstalled"/>
+	</Feature>
+	<Feature Id="MSSOAP3Intl_1033" Cost="42136">
+		<OptionRef Id="AlwaysInstalled"/>
+	</Feature>
+	<Feature Id="MsoInstalledPackagesScopedIntl_1033" Cost="0">
+		<OptionRef Id="AlwaysInstalled"/>
+	</Feature>
+	<Feature Id="GraphicsFiltersPICTFilesIntl_1033" Cost="76440">
+		<OptionRef Id="GraphicsFiltersPICTFiles"/>
+	</Feature>
+	<Feature Id="WISPHiddenIntl_1033" Cost="24576">
+		<OptionRef Id="WISPHidden"/>
+	</Feature>
+	<Feature Id="OfficeDigitalSFilesIntl_1033" Cost="12440">
+		<OptionRef Id="OfficeDigitalSFiles"/>
+	</Feature>
+	<Feature Id="TCRecoverFilesIntl_1033" Cost="39048">
+		<OptionRef Id="TCRecoverFiles"/>
+	</Feature>
+	<Feature Id="MSTagPluginPlacesFiles_1033" Cost="182432">
+		<OptionRef Id="MSTagPluginPlacesFiles"/>
+	</Feature>
+	<Feature Id="Gimme_OnDemandData" Cost="0">
+		<OptionRef Id="Gimme_OnDemandData"/>
+	</Feature>
+	<Feature Id="LISTFilesIntl_1033" Cost="523706">
+		<OptionRef Id="LISTFiles"/>
+	</Feature>
+	<Feature Id="GraphicsFiltersPNGFilesIntl_1033" Cost="279858">
+		<OptionRef Id="GraphicsFiltersPNGFiles"/>
+	</Feature>
+	<Feature Id="TOOLSFilesIntl_1033" Cost="32536">
+		<OptionRef Id="TOOLSFiles"/>
+	</Feature>
+	<Feature Id="LOBiFilesIntl_1033" Cost="0">
+		<OptionRef Id="LOBiFilesIntl"/>
+	</Feature>
+	<Feature Id="OSetupControllerIntl_1033" Cost="204088">
+		<OptionRef Id="AlwaysInstalled"/>
+	</Feature>
+	<Feature Id="QueryFilesIntl_1033" Cost="598274">
+		<OptionRef Id="QueryFiles"/>
+	</Feature>
+	<Feature Id="GraphicsFiltersJPEGFilesIntl_1033" Cost="234677">
+		<OptionRef Id="GraphicsFiltersJPEGFiles"/>
+	</Feature>
+	<Feature Id="EquationEditorFilesIntl_1033" Cost="794490">
+		<OptionRef Id="EquationEditorFiles"/>
+	</Feature>
+	<Feature Id="MSTagPluginNamesFilesIntl_1033" Cost="1844">
+		<OptionRef Id="MSTagPluginNamesFiles"/>
+	</Feature>
+	<Feature Id="SetupXmlFiles" Cost="234">
+		<OptionRef Id="AlwaysInstalled"/>
+	</Feature>
+	<Feature Id="GRAPHFilesIntl_1033" Cost="545392">
+		<OptionRef Id="GRAPHFiles"/>
+	</Feature>
+</Package>
