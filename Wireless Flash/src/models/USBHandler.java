@@ -45,12 +45,22 @@ public class USBHandler{
 		}
 	}
 	
+	/**
+	 * method used to declare main requirements to upload files
+	 * @param outToClient is output stream for socket
+	 * @param path is the path of the file/folder to be uploaded
+	 */
 	public static void uploadFile(DataOutputStream outToClient, String path) {
 		File mainFile = new File(ROOT+path);
 		String parent = mainFile.getParent().replace(ROOT, "");
 		sendFiles(outToClient, mainFile, parent);
 	}
-	
+	/**
+	 * method used to recursively upload files/folders
+	 * @param outToClient is output stream for socket
+	 * @param file is the main file/folder to be uploaded 
+	 * @param mainPath is the parents path (to estaplish relationship of files)
+	 */
 	public static void sendFiles(DataOutputStream outToClient, File file, String mainPath) {
 		MyFile myfile = new MyFile(file);
 		myfile.setPath(myfile.getPath().replace(mainPath, ""));

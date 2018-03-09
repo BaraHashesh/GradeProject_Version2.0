@@ -44,7 +44,7 @@ public class TCPClient {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public void downloadRequest(String path) {
+	public void downloadRequest(String path, String locationToSave) {
 		String request;
 		try {
 			Socket clientSocket = new Socket("localhost", 6789);
@@ -55,11 +55,11 @@ public class TCPClient {
 			for(String temp; (temp=inFromServer.readLine()) != null; ) {
 				MyFile myfile = JsonParser.singleJsonToMyFile(temp);
 				if(myfile.isDirectory()) {
-					File file = new File(myfile.getPath());
+					File file = new File(locationToSave+myfile.getPath());
 					file.mkdirs();
 				}
 				else {
-					FileOutputStream output = new FileOutputStream(myfile.getPath());
+					FileOutputStream output = new FileOutputStream(locationToSave+myfile.getPath());
 					long size = myfile.getSize();
 					byte[] buffer = new byte[1024];
 					while(size > 0) {

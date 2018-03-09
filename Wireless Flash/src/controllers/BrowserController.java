@@ -1,9 +1,11 @@
 package controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
+
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +20,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import models.MyFile;
 import models.TCPClient;
 import models.USBHandler;
@@ -146,5 +150,17 @@ public class BrowserController implements Initializable{
 		list.remove(file);
 		fileTable.setItems(list);
 		new TCPClient().deleteRequest(file.getPath());
+	}
+	
+	/**
+	 * method used to choose where to save file
+	 */
+	public void download() {
+		DirectoryChooser chooser = new DirectoryChooser();
+		chooser.setTitle("JavaFX Projects");
+		File defaultDirectory = new File("D:/");
+		chooser.setInitialDirectory(defaultDirectory);
+        MyFile file = fileTable.getSelectionModel().getSelectedItem();
+        new TCPClient().downloadRequest(file.getPath(), chooser.showDialog(null).getAbsolutePath()+"\\");
 	}
 }
