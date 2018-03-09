@@ -10,10 +10,9 @@ import javax.swing.filechooser.FileSystemView;
 
 /**
  * MyFile object is used as a replacment for the File object
- * interfaced with the TableView in javafx
- *
+ * to interfaced with the TableView in javafx
  */
-public class MyFile {
+public class MyFile{
 	
 	private String name;
 	private String path;
@@ -22,6 +21,7 @@ public class MyFile {
 	private long size;
 	private Date lastModified;
 	private boolean directory;
+	private String extension;
 	
 	/**
 	 * simple constructor for file object -> uses predefined methods
@@ -34,6 +34,10 @@ public class MyFile {
 		setSize(file);
 		setLastModified(file);
 		this.parent = file.getParent().replace(USBHandler.ROOT, "");
+		this.extension = extractExtension();
+	}
+	
+	public MyFile() {
 	}
 	
 	/**
@@ -82,7 +86,7 @@ public class MyFile {
 	 * method used to extract exact type of file
 	 * @return extension for the file (EXE, PDF, ...) 
 	 */
-	public String getExtension() {
+	public String extractExtension() {
 		String extension = "";
 
 		int i = this.path.lastIndexOf('.');
@@ -156,8 +160,60 @@ public class MyFile {
 	 * method used to obtain parent directory
 	 * @return directory at which the parent exists
 	 */
-	public String getPreviosDirectory() {
+	public String obtainPreviosDirectory() {
 		int i = this.parent.lastIndexOf("\\");
 		return this.parent.substring(0, i+1);
 	}
+	
+	/**
+	 * get method for the files extention
+	 * @return extension for the file (EXE, PDF, ...) 
+	 */
+	public String getExtension() {
+		return extension;
+	}
+
+	@Override
+	public String toString() {
+		return "MyFile [name=" + name + ", path=" + path + ", parent=" + parent + ", type=" + type + ", size=" + size
+				+ ", lastModified=" + lastModified + ", directory=" + directory + "]";
+	}
+
+/*------------------------------------------------------------------------------------------*/
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+	
+	
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void setSize(long size) {
+		this.size = size;
+	}
+
+	public void setLastModified(long lastModified) {
+		this.lastModified = new Date(lastModified);
+	}
+
+	public void setDirectory(boolean directory) {
+		this.directory = directory;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
+	
+	
+	
 }

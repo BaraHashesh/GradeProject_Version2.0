@@ -5,17 +5,16 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import models.LogFileHandler;
 import models.MyFile;
-import models.USBHandler;
+import models.TCPClient;
 
 public class Main extends Application {
 	public static void main(String[] args) {
 		LogFileHandler.clearLog();
-		MyFile[] listOfFiles = MyFile.parseFile(USBHandler.fileLister(""));
-		
-		
-		
+		MyFile[] listOfFiles = new TCPClient().sendRequestBrowser("");
+	
 		if(listOfFiles==null)
 			return;
+		
 		BrowserController.setList(listOfFiles);
 	    Application.launch(args);
 	}

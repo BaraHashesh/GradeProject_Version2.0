@@ -1,6 +1,8 @@
 package models;
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 
 /**
  * This Class is used to access the USB and get data or directories from it
@@ -14,12 +16,73 @@ public class USBHandler{
 	 * @param folderURL Path to folder (given root is an empty string i.e. "")
 	 * @return list of files in a directory
 	 */
-	public static File[] fileLister(String folderURL){
+	public static MyFile[] fileLister(String folderURL){
 		String loctaion = ROOT+folderURL;
 		File folder = new File(loctaion);
 		if(folder.exists()) 
-			return folder.listFiles();
+			return MyFile.parseFile(folder.listFiles());
 		LogFileHandler.printIntoLog("Class:FileLister - Method: fileLister - Directory not found");
 		return null;
+	}
+	
+	/**
+	 * method used to delete a file
+	 * @param path is the path of the file within the USB
+	 */
+	public static void deleteFile(String path) {
+		try {
+			File toDelete = new File(ROOT + path);
+			if(toDelete.isDirectory()) {
+				for(File sub : toDelete.listFiles()) {
+					if(sub.isDirectory())
+						deleteFile(sub.getPath().replace(ROOT, ""));
+					sub.delete();
+				}
+			}
+			toDelete.delete();	
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public static void uploadFile(DataOutputStream outToClient, String path) {
+		File mainFile = new File(ROOT+path);
+		String parent = mainFile.getParent().replace(ROOT, "");
+		sendFiles(outToClient, mainFile, parent);
+	}
+	
+	public static void sendFiles(DataOutputStream outToClient, File file, String mainPath) {
+		MyFile myfile = new MyFile(file);
+		myfile.setPath(myfile.getPath().replace(mainPath, ""));
+		if(myfile.getPath().startsWith("\\"))
+			myfile.setPath(myfile.getPath().replace("\\", ""));
+		String jsonFile = JsonParser.myFileToJson(myfile);
+		try {
+			outToClient.writeBytes(jsonFile+"\n");
+			if(file.isDirectory()) {
+				File[] list = file.listFiles();
+				for(int i = 0; i < list.length; i++) 
+					sendFiles(outToClient, list[i], mainPath);
+			}else{
+				FileInputStream filedata = new FileInputStream(file);
+				byte[] buffer = new byte[1024];
+				long size = file.length();
+				while(size != 0) {
+					if(size >= buffer.length) {
+						filedata.read(buffer, 0, buffer.length);
+						outToClient.write(buffer, 0, buffer.length);
+						size -= buffer.length;
+					}
+					else {
+						filedata.read(buffer, 0, (int)size);
+						outToClient.write(buffer, 0, (int)size);
+						size = 0;
+					}
+				}
+				filedata.close();
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

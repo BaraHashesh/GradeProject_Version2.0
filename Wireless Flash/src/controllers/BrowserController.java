@@ -19,18 +19,20 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import models.MyFile;
+import models.TCPClient;
 import models.USBHandler;
 
 public class BrowserController implements Initializable{
 	private static Scene bowserScene;
 	private static ObservableList<MyFile> list;
 	private static String parentDirectory = "";
+	private static TCPClient client = null;
 	
 	@FXML 
 	Label labelPath;
-	
+
 	@FXML
-	private Button next, back, download, remove, downloadAndRemove;
+	private Button back, download, remove, upload;
 	
 	@FXML
 	private TableView<MyFile> fileTable;
@@ -59,13 +61,14 @@ public class BrowserController implements Initializable{
 	public static void setList(MyFile[] listTODisplay) {
 		list = FXCollections.observableArrayList(listTODisplay);
 	}
-
+	
 	/**
 	 * method used to initialize the table view
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		client = new TCPClient();
 		
 		TableColumn<MyFile, String> name = new TableColumn<>("name");
     	TableColumn<MyFile, String> type = new TableColumn<>("type");
@@ -88,7 +91,7 @@ public class BrowserController implements Initializable{
 		    TableRow<MyFile> row = new TableRow<>();
 		    row.setOnMouseClicked(event -> {
 		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-		        	nextDirectory();
+					nextDirectory();
 		        }
 		    });
 		    return row ;
@@ -98,14 +101,14 @@ public class BrowserController implements Initializable{
 	/**
 	 * Action that is used to move downward in the USB file tree
 	 */
-	public void nextDirectory() {
+	public void nextDirectory(){
 		MyFile file = fileTable.getSelectionModel().getSelectedItem();
 		if(file.isDirectory()) {
 			String newPath = file.getPath();
 			parentDirectory = file.getParent();
 			if(parentDirectory == null)
 				parentDirectory = "";
-			setList(MyFile.parseFile(USBHandler.fileLister(newPath)));
+			setList(client.sendRequestBrowser(newPath));
 			updateLabel(newPath);
 			fileTable.setItems(list);
 		}
@@ -116,13 +119,13 @@ public class BrowserController implements Initializable{
 	 */
 	public void PreviosDirectory() {
 		if(list.toArray().length == 0) {
-			setList(MyFile.parseFile(USBHandler.fileLister(parentDirectory)));
+			setList(client.sendRequestBrowser(parentDirectory));
 			updateLabel(parentDirectory);
 		}
 		else {
-			String path = list.get(0).getPreviosDirectory();
+			String path = list.get(0).obtainPreviosDirectory();
 			updateLabel(path);
-			setList(MyFile.parseFile(USBHandler.fileLister(path)));
+			setList(USBHandler.fileLister(path));
 		}
 		fileTable.setItems(list);
 	}
@@ -133,5 +136,15 @@ public class BrowserController implements Initializable{
 	 */
 	public void updateLabel(String path) {
 		labelPath.setText(path);
+	}
+	
+	/**
+	 * method used to delete files
+	 */
+	public void delete() {
+		MyFile file = fileTable.getSelectionModel().getSelectedItem();
+		list.remove(file);
+		fileTable.setItems(list);
+		new TCPClient().deleteRequest(file.getPath());
 	}
 }
