@@ -14,7 +14,7 @@ public class Main extends Application {
 	
 		if(listOfFiles==null)
 			return;
-		
+
 		BrowserController.setList(listOfFiles);
 	    Application.launch(args);
 	}

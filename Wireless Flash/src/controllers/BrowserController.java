@@ -140,7 +140,7 @@ public class BrowserController implements Initializable{
 	public void updateLabel(String path) {
 		labelPath.setText(path);
 	}
-	
+
 	/**
 	 * method used to delete files
 	 */

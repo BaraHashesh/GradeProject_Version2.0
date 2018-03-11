@@ -5,6 +5,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.swing.filechooser.FileSystemView;
+
+import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
+import com.sun.org.apache.xml.internal.security.utils.Base64;
+
 
 /**
  * MyFile object is used as a replacment for the File object
@@ -16,10 +21,10 @@ public class MyFile{
 	private String path;
 	private String parent;
 	private String type;
+	private String extension;
 	private long size;
 	private Date lastModified;
 	private boolean directory;
-	private String extension;
 	
 	/**
 	 * simple constructor for file object -> uses predefined methods
@@ -34,8 +39,33 @@ public class MyFile{
 		this.parent = file.getParent().replace(USBHandler.ROOT, "");
 		this.extension = extractExtension();
 	}
-	
+
+	/**
+	 * empty constructor (used by JsonParser)
+	 */
 	public MyFile() {
+	}
+	
+	/**
+	 * used to encode strings to base64 to handle none english letters
+	 */
+	public void encode() {
+		this.name = Base64.encode(this.name.getBytes());
+		this.path = Base64.encode(this.path.getBytes());
+		this.parent = Base64.encode(this.parent.getBytes());
+	}
+	
+	/**
+	 * used to decode strings from base64 to handle none english letters
+	 */
+	public void decode() {
+		try {
+			setName(new String(Base64.decode(this.name.getBytes())));
+			setPath(new String(Base64.decode(this.path.getBytes())));
+			setParent(new String(Base64.decode(this.parent.getBytes())));
+		} catch (Base64DecodingException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -77,8 +107,8 @@ public class MyFile{
 	 */
 	public void setType(File file) {
 		this.directory = file.isDirectory();
-		//this.type = FileSystemView.getFileSystemView().getSystemIcon(file).toString();
-		this.type = "";
+		this.type = FileSystemView.getFileSystemView().getSystemIcon(file).toString();
+		//this.type = "";
 	}
 	
 	/**

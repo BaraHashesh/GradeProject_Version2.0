@@ -10,9 +10,11 @@ public class TCPClient {
 		try {
 			Socket clientSocket = new Socket("localhost", 6789);
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			BufferedReader inFromServer = new BufferedReader(
+					new InputStreamReader(clientSocket.getInputStream()));
 			request = "Browser" + "\n" + path;
-			outToServer.writeBytes(request + '\n');
+			outToServer.write(request.getBytes("UTF-8"));
+			outToServer.writeByte('\n');
 			response = "";
 			
 			for(String temp; (temp = inFromServer.readLine())!=null;)
@@ -34,7 +36,8 @@ public class TCPClient {
 			Socket clientSocket = new Socket("localhost", 6789);
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			request = "Delete" + "\n" + path;
-			outToServer.writeBytes(request + '\n');
+			outToServer.write(request.getBytes("UTF-8"));
+			outToServer.writeByte('\n');
 			outToServer.close();
 			clientSocket.close();
 		}catch(Exception e) {
@@ -42,7 +45,7 @@ public class TCPClient {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void downloadRequest(String path, String locationToSave) {
 		String request;
@@ -50,10 +53,15 @@ public class TCPClient {
 			Socket clientSocket = new Socket("localhost", 6789);
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			request = "Download" + "\n" + path;
-			outToServer.writeBytes(request + '\n');
+			
+			outToServer.write(request.getBytes("UTF-8"));
+			outToServer.writeByte('\n');
 			DataInputStream inFromServer = new DataInputStream(clientSocket.getInputStream());
 			for(String temp; (temp=inFromServer.readLine()) != null; ) {
 				MyFile myfile = JsonParser.singleJsonToMyFile(temp);
+				
+				myfile.decode();
+				
 				if(myfile.isDirectory()) {
 					File file = new File(locationToSave+myfile.getPath());
 					file.mkdirs();

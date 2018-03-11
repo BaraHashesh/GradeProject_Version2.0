@@ -13,11 +13,11 @@ class TCPServer {
 		String response;
 		@SuppressWarnings("resource")
 		ServerSocket welcomeSocket = new ServerSocket(6789);
-
+		
 		while (true) {
 			Socket connectionSocket = welcomeSocket.accept();
 			BufferedReader inFromClient = new BufferedReader(
-					new InputStreamReader(connectionSocket.getInputStream()));
+					new InputStreamReader(connectionSocket.getInputStream(), "UTF-8"));
 			
 			DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 			clientRequest = inFromClient.readLine();

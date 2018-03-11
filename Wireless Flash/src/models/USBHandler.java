@@ -64,10 +64,15 @@ public class USBHandler{
 	public static void sendFiles(DataOutputStream outToClient, File file, String mainPath) {
 		MyFile myfile = new MyFile(file);
 		myfile.setPath(myfile.getPath().replace(mainPath+"\\", ""));
+		
+		myfile.encode();
+	
 		String jsonFile = JsonParser.singleMyFileToJson(myfile);
+		
 		try {
 			jsonFile = jsonFile.replaceAll(""+((char)13)+((char)10), "");
-			outToClient.writeBytes(jsonFile+"\n");
+			outToClient.write(jsonFile.getBytes("UTF-8"));
+			outToClient.write('\n');
 			if(file.isDirectory()) {
 				File[] list = file.listFiles();
 				for(int i = 0; i < list.length; i++) 
