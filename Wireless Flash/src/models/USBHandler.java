@@ -10,7 +10,7 @@ import java.io.FileInputStream;
  */
 public class USBHandler{	
 	
-	public static final String ROOT = "E:\\";
+	public static final String ROOT = "G:\\";
 	/**
 	 * Method used to get the file list in a folder in the USB
 	 * @param folderURL Path to folder (given root is an empty string i.e. "")
@@ -63,9 +63,7 @@ public class USBHandler{
 	 */
 	public static void sendFiles(DataOutputStream outToClient, File file, String mainPath) {
 		MyFile myfile = new MyFile(file);
-		myfile.setPath(myfile.getPath().replace(mainPath, ""));
-		if(myfile.getPath().startsWith("\\"))
-			myfile.setPath(myfile.getPath().replace("\\", ""));
+		myfile.setPath(myfile.getPath().replace(mainPath+"\\", ""));
 		String jsonFile = JsonParser.singleMyFileToJson(myfile);
 		try {
 			jsonFile = jsonFile.replaceAll(""+((char)13)+((char)10), "");

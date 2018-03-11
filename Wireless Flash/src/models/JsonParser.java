@@ -67,7 +67,7 @@ public class JsonParser {
 			MyFile file = om.readValue(json, MyFile.class);
 			return file;
 		}catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return null;
 		}
 	}

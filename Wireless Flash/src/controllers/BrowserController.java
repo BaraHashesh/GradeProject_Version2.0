@@ -21,7 +21,6 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import models.MyFile;
 import models.TCPClient;
 import models.USBHandler;

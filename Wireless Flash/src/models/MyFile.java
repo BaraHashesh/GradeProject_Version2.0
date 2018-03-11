@@ -5,8 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.swing.filechooser.FileSystemView;
-
 
 /**
  * MyFile object is used as a replacment for the File object
@@ -79,7 +77,8 @@ public class MyFile{
 	 */
 	public void setType(File file) {
 		this.directory = file.isDirectory();
-		this.type = FileSystemView.getFileSystemView().getSystemIcon(file).toString();
+		//this.type = FileSystemView.getFileSystemView().getSystemIcon(file).toString();
+		this.type = "";
 	}
 	
 	/**
