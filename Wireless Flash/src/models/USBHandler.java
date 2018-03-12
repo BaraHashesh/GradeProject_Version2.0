@@ -1,7 +1,9 @@
 package models;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * This Class is used to access the USB and get data or directories from it
@@ -9,7 +11,7 @@ import java.io.File;
  */
 public class USBHandler{	
 	
-	public static final String ROOT = "G:\\";
+	public static final String ROOT = "H:\\";
 	/**
 	 * Method used to get the file list in a folder in the USB
 	 * @param folderURL Path to folder (given root is an empty string i.e. "")
@@ -54,5 +56,46 @@ public class USBHandler{
 		File mainFile = new File(path);
 		String parent = mainFile.getParent();
 		FileTransfer.sendFiles(outToClient, mainFile, parent);
+	}
+	
+	/**
+	 * method used to recieve files from client
+	 * @param fromClient is input strean
+	 * @param path is location to be saved with refrence to the USB
+	 */
+	@SuppressWarnings("deprecation")
+	public static void downloadFile(DataInputStream fromClient, String path) {
+		path = ROOT + path;
+		try {
+			for(String temp; (temp=fromClient.readLine()) != null; ) {
+				MyFile myfile = JsonParser.singleJsonToMyFile(temp);
+				
+				myfile.decode();
+
+				if(myfile.isDirectory()) {
+					File file = new File(path+myfile.getPath());
+					file.mkdirs();
+				}
+				else {
+					FileOutputStream output = new FileOutputStream(path+myfile.getPath());
+					long size = Long.parseLong(myfile.getSize());
+					byte[] buffer = new byte[1024];
+					while(size > 0) {
+						if(size >= buffer.length) {
+							fromClient.read(buffer, 0, buffer.length);
+							output.write(buffer, 0, buffer.length);
+							size -= buffer.length;
+						}else {
+							fromClient.read(buffer, 0, (int)size);
+							output.write(buffer, 0, (int)size);
+							size = 0 ;
+						}
+					}
+					output.close();
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -43,34 +43,7 @@ class TCPServer {
 			
 			if(clientRequest.compareTo(requestTypes[1]) == 0) {//upload request
 				String path = inFromClient.readLine();
-				for(String temp; (temp=is.readLine()) != null; ) {
-					System.out.println(temp);
-					MyFile myfile = JsonParser.singleJsonToMyFile(temp);
-					
-					myfile.decode();
-					System.out.println(myfile);
-					if(myfile.isDirectory()) {
-						File file = new File(myfile.getPath());
-						file.mkdirs();
-					}
-					else {
-						FileOutputStream output = new FileOutputStream(myfile.getPath());
-						long size = Long.parseLong(myfile.getSize());
-						byte[] buffer = new byte[1024];
-						while(size > 0) {
-							if(size >= buffer.length) {
-								is.read(buffer, 0, buffer.length);
-								output.write(buffer, 0, buffer.length);
-								size -= buffer.length;
-							}else {
-								is.read(buffer, 0, (int)size);
-								output.write(buffer, 0, (int)size);
-								size = 0 ;
-							}
-						}
-						output.close();
-					}
-				}
+				USBHandler.downloadFile(is, path);
 			}
 			is.close();
 			inFromClient.close();
