@@ -44,10 +44,11 @@ class TCPServer {
 			if(clientRequest.compareTo(requestTypes[1]) == 0) {//upload request
 				String path = inFromClient.readLine();
 				for(String temp; (temp=is.readLine()) != null; ) {
+					System.out.println(temp);
 					MyFile myfile = JsonParser.singleJsonToMyFile(temp);
 					
 					myfile.decode();
-					
+					System.out.println(myfile);
 					if(myfile.isDirectory()) {
 						File file = new File(myfile.getPath());
 						file.mkdirs();
