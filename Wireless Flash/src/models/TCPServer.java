@@ -8,7 +8,6 @@ import java.net.*;
 class TCPServer {
 	private static final String requestTypes[] = {"Browser", "Upload", "Download", "Delete"};
 	
-	@SuppressWarnings("deprecation")
 	public static void main(String argv[]) throws Exception {
 		String clientRequest;
 		String response;
@@ -31,10 +30,11 @@ class TCPServer {
 				outToClient.write(response.getBytes());
 			}	
 			
-			if(clientRequest.compareTo(requestTypes[3]) == 0) {//delete request
+			if(clientRequest.compareTo(requestTypes[3]) == 0) {//delete reques
 				String path = inFromClient.readLine();
 				USBHandler.deleteFile(path);
 			}
+			
 			
 			if(clientRequest.compareTo(requestTypes[2]) == 0) {//download request
 				String path = inFromClient.readLine();

@@ -3,8 +3,6 @@ package models;
 import java.io.*;
 import java.net.*;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
-
 /**
  * This Class is used by the client to send requests to server
  * and to recieve the response data if it exists
@@ -73,7 +71,6 @@ public class TCPClient {
 			Socket clientSocket = new Socket("localhost", 6789);
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			request = "Download" + "\n" + path;
-			request = Base64.encode(request.getBytes("UTF-8"));
 			outToServer.write(request.getBytes("UTF-8"));
 			outToServer.writeByte('\n');
 			DataInputStream inFromServer = new DataInputStream(clientSocket.getInputStream());
