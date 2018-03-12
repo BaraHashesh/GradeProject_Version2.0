@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import javax.swing.JFileChooser;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -156,10 +157,21 @@ public class BrowserController implements Initializable{
 	 */
 	public void download() {
 		DirectoryChooser chooser = new DirectoryChooser();
-		chooser.setTitle("JavaFX Projects");
+		chooser.setTitle("Place to Save");
 		File defaultDirectory = new File("D:/");
 		chooser.setInitialDirectory(defaultDirectory);
         MyFile file = fileTable.getSelectionModel().getSelectedItem();
         new TCPClient().downloadRequest(file.getPath(), chooser.showDialog(null).getAbsolutePath()+"\\");
+	}
+	
+	public void upload() {
+		JFileChooser chooser = new JFileChooser(".");
+		chooser.setMultiSelectionEnabled(true);
+		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		int ret = chooser.showOpenDialog(null);
+		if(ret == JFileChooser.APPROVE_OPTION) {
+			File file = chooser.getSelectedFile();
+			new TCPClient().uploadRequest(file, labelPath.getText());
+		}
 	}
 }

@@ -22,7 +22,7 @@ public class MyFile{
 	private String parent;
 	private String type;
 	private String extension;
-	private long size;
+	private String size;
 	private Date lastModified;
 	private boolean directory;
 	
@@ -31,20 +31,19 @@ public class MyFile{
 	 * @param pathname: URL for the file
 	 */
 	public MyFile(File file) {
-		this.path = file.getPath().replace(USBHandler.ROOT, "");
+		this.path = file.getPath();
 		this.name = file.getName();
 		setType(file);
 		setSize(file);
 		setLastModified(file);
-		this.parent = file.getParent().replace(USBHandler.ROOT, "");
+		this.parent = file.getParent();
 		this.extension = extractExtension();
 	}
 
 	/**
 	 * empty constructor (used by JsonParser)
 	 */
-	public MyFile() {
-	}
+	public MyFile() {}
 	
 	/**
 	 * used to encode strings to base64 to handle none english letters
@@ -88,7 +87,7 @@ public class MyFile{
 	 * get method for file size
 	 * @return file size in bytes
 	 */
-	public long getSize() {
+	public String getSize() {
 		return size;
 	}
 
@@ -158,7 +157,10 @@ public class MyFile{
 	 * @param file is the file to obtain size for
 	 */
 	private void setSize(File file) {
-		this.size = file.length();
+		if(!file.isDirectory())
+			this.size = file.length()+"";
+		else
+			this.size = "";
 	}
 
 	/**
@@ -227,7 +229,7 @@ public class MyFile{
 		this.type = type;
 	}
 
-	public void setSize(long size) {
+	public void setSize(String size) {
 		this.size = size;
 	}
 

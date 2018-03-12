@@ -2,7 +2,6 @@ package models;
 
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 
 /**
  * This Class is used to access the USB and get data or directories from it
@@ -17,8 +16,9 @@ public class USBHandler{
 	 * @return list of files in a directory
 	 */
 	public static MyFile[] fileLister(String folderURL){
-		String loctaion = ROOT+folderURL;
-		File folder = new File(loctaion);
+		if(folderURL.compareTo("") == 0)
+			folderURL = ROOT;
+		File folder = new File(folderURL);
 		if(folder.exists()) 
 			return MyFile.parseFile(folder.listFiles());
 		LogFileHandler.printIntoLog("Class:FileLister - Method: fileLister - Directory not found");
@@ -31,11 +31,11 @@ public class USBHandler{
 	 */
 	public static void deleteFile(String path) {
 		try {
-			File toDelete = new File(ROOT + path);
+			File toDelete = new File(path);
 			if(toDelete.isDirectory()) {
 				for(File sub : toDelete.listFiles()) {
 					if(sub.isDirectory())
-						deleteFile(sub.getPath().replace(ROOT, ""));
+						deleteFile(sub.getPath());
 					sub.delete();
 				}
 			}
@@ -51,52 +51,8 @@ public class USBHandler{
 	 * @param path is the path of the file/folder to be uploaded
 	 */
 	public static void uploadFile(DataOutputStream outToClient, String path) {
-		File mainFile = new File(ROOT+path);
-		String parent = mainFile.getParent().replace(ROOT, "");
-		sendFiles(outToClient, mainFile, parent);
-	}
-	/**
-	 * method used to recursively upload files/folders
-	 * @param outToClient is output stream for socket
-	 * @param file is the main file/folder to be uploaded 
-	 * @param mainPath is the parents path (to estaplish relationship of files)
-	 */
-	public static void sendFiles(DataOutputStream outToClient, File file, String mainPath) {
-		MyFile myfile = new MyFile(file);
-		myfile.setPath(myfile.getPath().replace(mainPath+"\\", ""));
-		
-		myfile.encode();
-	
-		String jsonFile = JsonParser.singleMyFileToJson(myfile);
-		
-		try {
-			jsonFile = jsonFile.replaceAll(""+((char)13)+((char)10), "");
-			outToClient.write(jsonFile.getBytes("UTF-8"));
-			outToClient.write('\n');
-			if(file.isDirectory()) {
-				File[] list = file.listFiles();
-				for(int i = 0; i < list.length; i++) 
-					sendFiles(outToClient, list[i], mainPath);
-			}else{
-				FileInputStream filedata = new FileInputStream(file);
-				byte[] buffer = new byte[1024];
-				long size = file.length();
-				while(size != 0) {
-					if(size >= buffer.length) {
-						filedata.read(buffer, 0, buffer.length);
-						outToClient.write(buffer, 0, buffer.length);
-						size -= buffer.length;
-					}
-					else {
-						filedata.read(buffer, 0, (int)size);
-						outToClient.write(buffer, 0, (int)size);
-						size = 0;
-					}
-				}
-				filedata.close();
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+		File mainFile = new File(path);
+		String parent = mainFile.getParent();
+		FileTransfer.sendFiles(outToClient, mainFile, parent);
 	}
 }
