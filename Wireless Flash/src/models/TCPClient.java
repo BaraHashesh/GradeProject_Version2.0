@@ -77,7 +77,7 @@ public class TCPClient {
 			for(String temp; (temp=inFromServer.readLine()) != null; ) {
 				MyFile myfile = JsonParser.singleJsonToMyFile(temp);
 				
-				myfile.decode();
+				//myfile.decode();
 				
 				if(myfile.isDirectory()) {
 					File file = new File(locationToSave+myfile.getPath());

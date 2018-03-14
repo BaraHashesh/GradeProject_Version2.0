@@ -70,7 +70,7 @@ public class USBHandler{
 			for(String temp; (temp=fromClient.readLine()) != null; ) {
 				MyFile myfile = JsonParser.singleJsonToMyFile(temp);
 				
-				myfile.decode();
+				//myfile.decode();
 
 				if(myfile.isDirectory()) {
 					File file = new File(path+myfile.getPath());

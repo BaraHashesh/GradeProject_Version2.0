@@ -15,6 +15,8 @@ public class JsonParser {
 	 */
 	public static String myFileToJson(MyFile[] list){
 		try {
+			for(int i = 0; i < list.length; i++)
+				list[i].encode();
 			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 			String json = ow.writeValueAsString(list);
 			return json;
@@ -33,6 +35,8 @@ public class JsonParser {
 		try {
 			ObjectMapper om = new ObjectMapper();
 			MyFile[] list = om.readValue(json, MyFile[].class);
+			for(int i = 0; i < list.length; i++)
+				list[i].decode();
 			return list;
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -47,6 +51,7 @@ public class JsonParser {
 	 */
 	public static String singleMyFileToJson(MyFile file){
 		try {
+			file.encode();
 			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 			String json = ow.writeValueAsString(file);
 			return json;
@@ -65,6 +70,7 @@ public class JsonParser {
 		try {
 			ObjectMapper om = new ObjectMapper();
 			MyFile file = om.readValue(json, MyFile.class);
+			file.decode();
 			return file;
 		}catch (Exception e) {
 			//e.printStackTrace();
