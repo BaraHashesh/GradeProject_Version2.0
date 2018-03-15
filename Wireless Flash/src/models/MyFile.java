@@ -4,11 +4,9 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Base64;
 
 import javax.swing.filechooser.FileSystemView;
-
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 
 /**
@@ -49,9 +47,9 @@ public class MyFile{
 	 * used to encode strings to base64 to handle none english letters
 	 */
 	public void encode() {
-		this.name = Base64.encode(this.name.getBytes());
-		this.path = Base64.encode(this.path.getBytes());
-		this.parent = Base64.encode(this.parent.getBytes());
+		this.name = Base64.getEncoder().encodeToString(this.name.getBytes());
+		this.path = Base64.getEncoder().encodeToString(this.path.getBytes());
+		this.parent = Base64.getEncoder().encodeToString(this.parent.getBytes());
 	}
 	
 	/**
@@ -59,10 +57,10 @@ public class MyFile{
 	 */
 	public void decode() {
 		try {
-			setName(new String(Base64.decode(this.name.getBytes())));
-			setPath(new String(Base64.decode(this.path.getBytes())));
-			setParent(new String(Base64.decode(this.parent.getBytes())));
-		} catch (Base64DecodingException e) {
+			setName(new String(Base64.getDecoder().decode(this.name.getBytes())));
+			setPath(new String(Base64.getDecoder().decode(this.path.getBytes())));
+			setParent(new String(Base64.getDecoder().decode(this.parent.getBytes())));
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
