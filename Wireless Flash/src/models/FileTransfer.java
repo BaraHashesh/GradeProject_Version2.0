@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 public class FileTransfer {
-	
+	private static final int BUFFERSIZE = 32768;
 	/**
 	 * method used to recursively upload files/folders
 	 * @param outToClient is output stream for socket
@@ -36,7 +36,7 @@ public class FileTransfer {
 					sendFiles(outToClient, list[i], mainPath);
 			}else{
 				FileInputStream filedata = new FileInputStream(file);
-				byte[] buffer = new byte[32768];
+				byte[] buffer = new byte[BUFFERSIZE];
 				long size = file.length();
 				while(size != 0) {
 					if(size >= buffer.length) {
@@ -76,7 +76,7 @@ public class FileTransfer {
 				else {
 					FileOutputStream output = new FileOutputStream(path+myfile.getPath());
 					long size = Long.parseLong(myfile.getSize());
-					byte[] buffer = new byte[32768];
+					byte[] buffer = new byte[BUFFERSIZE];
 					while(size > 0) {
 						if(size >= buffer.length) {
 							inputStream.read(buffer, 0, buffer.length);
