@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 public class FileTransfer {
-	private static final int BUFFERSIZE = 32768;
+	private static final int BUFFERSIZE = 1024;
 	/**
 	 * method used to recursively upload files/folders
 	 * @param outToClient is output stream for socket
