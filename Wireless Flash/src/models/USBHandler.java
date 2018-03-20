@@ -3,7 +3,6 @@ package models;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 
 /**
  * This Class is used to access the USB and get data or directories from it
@@ -63,39 +62,13 @@ public class USBHandler{
 	 * @param fromClient is input strean
 	 * @param path is location to be saved with refrence to the USB
 	 */
-	@SuppressWarnings("deprecation")
 	public static void downloadFile(DataInputStream fromClient, String path) {
-		path = ROOT + path;
-		try {
-			for(String temp; (temp=fromClient.readLine()) != null; ) {
-				MyFile myfile = JsonParser.singleJsonToMyFile(temp);
-				
-				//myfile.decode();
-
-				if(myfile.isDirectory()) {
-					File file = new File(path+myfile.getPath());
-					file.mkdirs();
-				}
-				else {
-					FileOutputStream output = new FileOutputStream(path+myfile.getPath());
-					long size = Long.parseLong(myfile.getSize());
-					byte[] buffer = new byte[1024];
-					while(size > 0) {
-						if(size >= buffer.length) {
-							fromClient.read(buffer, 0, buffer.length);
-							output.write(buffer, 0, buffer.length);
-							size -= buffer.length;
-						}else {
-							fromClient.read(buffer, 0, (int)size);
-							output.write(buffer, 0, (int)size);
-							size = 0 ;
-						}
-					}
-					output.close();
-				}
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+		if(path.compareTo("") == 0)
+			path = ROOT;
+		
+		if(path.compareTo(ROOT) != 0)
+			path = path + "\\";
+		
+		FileTransfer.receiveFiles(fromClient, path);
 	}
 }

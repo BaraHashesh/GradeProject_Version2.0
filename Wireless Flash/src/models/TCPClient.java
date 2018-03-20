@@ -64,7 +64,6 @@ public class TCPClient {
 	 * @param path is the path to the file within the USB
 	 * @param locationToSave is the location to save the file to
 	 */
-	@SuppressWarnings("deprecation")
 	public void downloadRequest(String path, String locationToSave) {
 		String request;
 		try {
@@ -74,33 +73,8 @@ public class TCPClient {
 			outToServer.write(request.getBytes("UTF-8"));
 			outToServer.writeByte('\n');
 			DataInputStream inFromServer = new DataInputStream(clientSocket.getInputStream());
-			for(String temp; (temp=inFromServer.readLine()) != null; ) {
-				MyFile myfile = JsonParser.singleJsonToMyFile(temp);
-				
-				//myfile.decode();
-				
-				if(myfile.isDirectory()) {
-					File file = new File(locationToSave+myfile.getPath());
-					file.mkdirs();
-				}
-				else {
-					FileOutputStream output = new FileOutputStream(locationToSave+myfile.getPath());
-					long size = Long.parseLong(myfile.getSize());
-					byte[] buffer = new byte[1024];
-					while(size > 0) {
-						if(size >= buffer.length) {
-							inFromServer.read(buffer, 0, buffer.length);
-							output.write(buffer, 0, buffer.length);
-							size -= buffer.length;
-						}else {
-							inFromServer.read(buffer, 0, (int)size);
-							output.write(buffer, 0, (int)size);
-							size = 0 ;
-						}
-					}
-					output.close();
-				}
-			}
+			
+			FileTransfer.receiveFiles(inFromServer, locationToSave);
 			outToServer.close();
 			clientSocket.close();
 		}catch(Exception e) {
@@ -130,5 +104,5 @@ public class TCPClient {
 			LogFileHandler.printIntoLog(e.toString());
 			e.printStackTrace();
 		}
-	}	
+	}
 }
