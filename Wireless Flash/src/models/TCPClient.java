@@ -8,6 +8,7 @@ import java.net.*;
  * and to recieve the response data if it exists
  */
 public class TCPClient {
+	private static String IP = "localhost";
 	/**
 	 * request used to fetch the information if files in a certain directory
 	 * @param path is the path to the directory with in the USB
@@ -17,7 +18,7 @@ public class TCPClient {
 		String request;
 		String response = "";
 		try {
-			Socket clientSocket = new Socket("localhost", 6789);
+			Socket clientSocket = new Socket(IP, 6789);
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			BufferedReader inFromServer = new BufferedReader(
 					new InputStreamReader(clientSocket.getInputStream()));
@@ -46,7 +47,7 @@ public class TCPClient {
 	public void deleteRequest(String path) {
 		String request;
 		try {
-			Socket clientSocket = new Socket("localhost", 6789);
+			Socket clientSocket = new Socket(IP, 6789);
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			request = "Delete" + "\n" + path;
 			outToServer.write(request.getBytes("UTF-8"));
@@ -67,7 +68,7 @@ public class TCPClient {
 	public void downloadRequest(String path, String locationToSave) {
 		String request;
 		try {
-			Socket clientSocket = new Socket("localhost", 6789);
+			Socket clientSocket = new Socket(IP, 6789);
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			request = "Download" + "\n" + path;
 			outToServer.write(request.getBytes("UTF-8"));
@@ -91,7 +92,7 @@ public class TCPClient {
 	public void uploadRequest(File file, String locationToSave) {
 		String request;
 		try {
-			Socket clientSocket = new Socket("localhost", 6789);
+			Socket clientSocket = new Socket(IP, 6789);
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			request = "Upload" + "\n" + locationToSave;
 			outToServer.write(request.getBytes("UTF-8"));

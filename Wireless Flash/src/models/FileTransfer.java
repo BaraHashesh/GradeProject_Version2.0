@@ -28,8 +28,8 @@ public class FileTransfer {
 		
 		try {
 			jsonFile = jsonFile.replaceAll(""+((char)13)+((char)10), "");
-			outToClient.write(jsonFile.getBytes("UTF-8"));
-			outToClient.write('\n');
+			outToClient.write(jsonFile.getBytes());
+			outToClient.writeBytes("\r\n");
 			if(file.isDirectory()) {
 				File[] list = file.listFiles();
 				for(int i = 0; i < list.length; i++) 
