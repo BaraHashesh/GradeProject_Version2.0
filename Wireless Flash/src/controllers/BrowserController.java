@@ -24,7 +24,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.DirectoryChooser;
 import models.MyFile;
 import models.TCPClient;
-import models.USBHandler;
 
 public class BrowserController implements Initializable{
 	private static Scene bowserScene;
