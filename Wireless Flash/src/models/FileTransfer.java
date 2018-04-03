@@ -21,11 +21,10 @@ public class FileTransfer {
 		
 		if(myfile.getPath().startsWith("\\\\"))
 			myfile.setPath(myfile.getPath().replaceFirst("\\\\", ""));
-		
+
 		//myfile.encode();
 	
 		String jsonFile = JsonParser.singleMyFileToJson(myfile);
-		
 		try {
 			jsonFile = jsonFile.replaceAll(""+((char)13)+((char)10), "");
 			outToClient.write(jsonFile.getBytes());

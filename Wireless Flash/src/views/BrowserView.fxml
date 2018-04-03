@@ -18,5 +18,6 @@
             <Font size="31.0" />
          </font>
       </Label>
+      <Button fx:id="test" layoutX="66.0" layoutY="718.0" mnemonicParsing="false" onMouseClicked="#test" text="test" />
    </children>
 </AnchorPane>

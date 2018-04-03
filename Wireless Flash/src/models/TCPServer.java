@@ -6,7 +6,7 @@ import java.net.*;
  * Class used to create a simple server on the device
  */
 class TCPServer {
-	private static final String REQUESTTYPES[] = {"Browser", "Upload", "Download", "Delete"};
+	private static final String REQUESTTYPES[] = {"Browser", "Upload", "Download", "Delete", "Test"};
 	
 	public static void main(String argv[]) throws Exception {
 		String clientRequest;
@@ -27,9 +27,9 @@ class TCPServer {
 			if(clientRequest.compareTo(REQUESTTYPES[0]) == 0) {//browser request
 				String path = inFromClient.readLine();
 				response = JsonParser.myFileToJson(USBHandler.fileLister(path)) + "\n";
-				outToClient.write(response.getBytes());
+				outToClient.writeBytes(response);
 			}	
-			
+		
 			if(clientRequest.compareTo(REQUESTTYPES[3]) == 0) {//delete reques
 				String path = inFromClient.readLine();
 				USBHandler.deleteFile(path);
@@ -45,6 +45,12 @@ class TCPServer {
 				String path = inFromClient.readLine();
 				USBHandler.downloadFile(is, path);
 			}
+			
+			if(clientRequest.compareTo(REQUESTTYPES[4]) == 0) {
+				String path = inFromClient.readLine();
+				USBHandler.uploadFile(outToClient, path);
+			}
+			
 			is.close();
 			inFromClient.close();
 			outToClient.close();

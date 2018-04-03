@@ -36,7 +36,7 @@ public class BrowserController implements Initializable{
 	Label labelPath;
 
 	@FXML
-	private Button back, download, remove, upload;
+	private Button back, download, remove, upload, test;
 	
 	@FXML
 	private TableView<MyFile> fileTable;
@@ -129,7 +129,7 @@ public class BrowserController implements Initializable{
 		else {
 			String path = list.get(0).obtainPreviosDirectory();
 			updateLabel(path);
-			setList(USBHandler.fileLister(path));
+			setList(client.sendRequestBrowser(path));
 		}
 		fileTable.setItems(list);
 	}
@@ -173,5 +173,11 @@ public class BrowserController implements Initializable{
 			File file = chooser.getSelectedFile();
 			new TCPClient().uploadRequest(file, labelPath.getText());
 		}
+	}
+	
+	
+	public void test() {
+        MyFile file = fileTable.getSelectionModel().getSelectedItem();
+        new TCPClient().Test(file.getPath());
 	}
 }

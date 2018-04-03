@@ -60,7 +60,7 @@ public class JsonParser {
 			return "";
 		}
 	}
-	
+
 	/**
 	 * method used to convert json string into MyFile object
 	 * @param json is json string containing MyFile object
