@@ -1,6 +1,9 @@
-package models;
+package main;
 import java.io.*;
 import java.net.*;
+
+import models.JsonParser;
+import models.USBHandler;
 
 /**
  * Class used to create a simple server on the device
