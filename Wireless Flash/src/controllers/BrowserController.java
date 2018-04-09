@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import javax.swing.Icon;
 import javax.swing.JFileChooser;
 
 import javafx.collections.FXCollections;
@@ -74,13 +75,13 @@ public class BrowserController implements Initializable{
 		client = new TCPClient();
 		
 		TableColumn<MyFile, String> name = new TableColumn<>("name");
-    	TableColumn<MyFile, String> type = new TableColumn<>("type");
+    	TableColumn<MyFile, Icon> type = new TableColumn<>("type");
     	TableColumn<MyFile, String> extension = new TableColumn<>("extension");
     	TableColumn<MyFile, Date> date = new TableColumn<>("Last Modified");
     	TableColumn<MyFile, Long> size = new TableColumn<>("size(Bytes)");
     	
     	name.setCellValueFactory(new PropertyValueFactory<MyFile, String>("name"));
-    	type.setCellValueFactory(new PropertyValueFactory<MyFile, String>("type"));
+    	type.setCellValueFactory(new PropertyValueFactory<MyFile, Icon>("type"));
     	extension.setCellValueFactory(new PropertyValueFactory<MyFile, String>("extension"));
     	date.setCellValueFactory(new PropertyValueFactory<MyFile, Date>("lastModified"));
     	size.setCellValueFactory(new PropertyValueFactory<MyFile, Long>("size"));
@@ -111,7 +112,7 @@ public class BrowserController implements Initializable{
 			parentDirectory = file.getParent();
 			if(parentDirectory == null)
 				parentDirectory = "";
-			setList(client.sendRequestBrowser(newPath));
+			setList(client.browserRequest(newPath));
 			updateLabel(newPath);
 			fileTable.setItems(list);
 		}
@@ -122,13 +123,13 @@ public class BrowserController implements Initializable{
 	 */
 	public void PreviosDirectory() {
 		if(list.toArray().length == 0) {
-			setList(client.sendRequestBrowser(parentDirectory));
+			setList(client.browserRequest(parentDirectory));
 			updateLabel(parentDirectory);
 		}
 		else {
 			String path = list.get(0).obtainPreviosDirectory();
 			updateLabel(path);
-			setList(client.sendRequestBrowser(path));
+			setList(client.browserRequest(path));
 		}
 		fileTable.setItems(list);
 	}
@@ -160,7 +161,10 @@ public class BrowserController implements Initializable{
 		File defaultDirectory = new File("D:/");
 		chooser.setInitialDirectory(defaultDirectory);
         MyFile file = fileTable.getSelectionModel().getSelectedItem();
-        new TCPClient().downloadRequest(file.getPath(), chooser.showDialog(null).getAbsolutePath()+"\\");
+        long start = System.nanoTime();
+        client.downloadRequest(file.getPath(), chooser.showDialog(null).getAbsolutePath()+"\\");
+		long finish = System.nanoTime();
+		System.out.println((finish-start)/1000000);
 	}
 	
 	public void upload() {

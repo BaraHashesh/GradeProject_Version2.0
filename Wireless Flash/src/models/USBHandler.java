@@ -1,5 +1,6 @@
 package models;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -51,10 +52,10 @@ public class USBHandler{
 	 * @param outToClient is output stream for socket
 	 * @param path is the path of the file/folder to be uploaded
 	 */
-	public static void uploadFile(DataOutputStream outToClient, String path) {
+	public static void uploadFile(BufferedReader fromClient, DataOutputStream outToClient, String path) {
 		File mainFile = new File(path);
 		String parent = mainFile.getParent();
-		FileTransfer.sendFiles(outToClient, mainFile, parent);
+		FileTransfer.sendFiles(fromClient, outToClient, mainFile, parent);
 	}
 	
 	/**
@@ -62,13 +63,19 @@ public class USBHandler{
 	 * @param fromClient is input strean
 	 * @param path is location to be saved with refrence to the USB
 	 */
-	public static void downloadFile(DataInputStream fromClient, String path) {
+	public static void downloadFile(DataOutputStream toClient, DataInputStream fromClient, String path) {
 		if(path.compareTo("") == 0)
 			path = ROOT;
 		
 		if(path.compareTo(ROOT) != 0)
 			path = path + "\\";
 		
-		FileTransfer.receiveFiles(fromClient, path);
+		try {
+			toClient.writeBytes("true\n");
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		FileTransfer.receiveFiles(toClient, fromClient, path);
 	}
 }

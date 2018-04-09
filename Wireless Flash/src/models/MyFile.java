@@ -105,7 +105,6 @@ public class MyFile{
 	public void setType(File file) {
 		this.directory = file.isDirectory();
 		this.type = FileSystemView.getFileSystemView().getSystemIcon(file).toString();
-		//this.type = "";
 	}
 	
 	/**

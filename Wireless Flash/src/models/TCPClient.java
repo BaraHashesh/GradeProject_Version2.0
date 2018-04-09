@@ -1,5 +1,4 @@
 package models;
-
 import java.io.*;
 import java.net.*;
 
@@ -9,12 +8,13 @@ import java.net.*;
  */
 public class TCPClient {
 	private static String IP = "localhost";
+	
 	/**
 	 * request used to fetch the information if files in a certain directory
 	 * @param path is the path to the directory with in the USB
 	 * @return information about the files in the directory if it exists
 	 */
-	public MyFile[] sendRequestBrowser(String path) {
+	public MyFile[] browserRequest(String path) {
 		String request;
 		String response = "";
 		try {
@@ -29,7 +29,6 @@ public class TCPClient {
 			
 			for(String temp; (temp = inFromServer.readLine())!=null;)
 				response+=temp;
-			
 			outToServer.close();
 			inFromServer.close();
 			clientSocket.close();
@@ -70,12 +69,14 @@ public class TCPClient {
 		try {
 			Socket clientSocket = new Socket(IP, 6789);
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+			
 			request = "Download" + "\n" + path;
 			outToServer.write(request.getBytes("UTF-8"));
 			outToServer.writeByte('\n');
+			outToServer.writeBytes("true\n");
 			DataInputStream inFromServer = new DataInputStream(clientSocket.getInputStream());
 			
-			FileTransfer.receiveFiles(inFromServer, locationToSave);
+			FileTransfer.receiveFiles(outToServer, inFromServer, locationToSave);
 			outToServer.close();
 			clientSocket.close();
 		}catch(Exception e) {
@@ -94,11 +95,15 @@ public class TCPClient {
 		try {
 			Socket clientSocket = new Socket(IP, 6789);
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+			
+			BufferedReader inFromServer = new BufferedReader(
+					new InputStreamReader(clientSocket.getInputStream()));
+			
 			request = "Upload" + "\n" + locationToSave;
 			outToServer.write(request.getBytes("UTF-8"));
 			outToServer.writeByte('\n');
 			String parent = file.getParent();
-			FileTransfer.sendFiles(outToServer, file, parent);
+			FileTransfer.sendFiles(inFromServer, outToServer, file, parent);
 			outToServer.close();
 			clientSocket.close();
 		}catch(Exception e) {

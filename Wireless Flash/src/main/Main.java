@@ -10,7 +10,7 @@ import models.TCPClient;
 public class Main extends Application {
 	public static void main(String[] args) {
 		LogFileHandler.clearLog();
-		MyFile[] listOfFiles = new TCPClient().sendRequestBrowser("");
+		MyFile[] listOfFiles = new TCPClient().browserRequest("");
 	
 		if(listOfFiles==null)
 			return;
