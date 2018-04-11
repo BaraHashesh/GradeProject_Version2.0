@@ -4,9 +4,10 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Base64;
 
 import javax.swing.filechooser.FileSystemView;
+
+import java.util.Base64;
 
 
 /**
@@ -15,6 +16,7 @@ import javax.swing.filechooser.FileSystemView;
  */
 public class MyFile{
 	
+	//private Icon icon;
 	private String name;
 	private String path;
 	private String parent;
@@ -104,7 +106,9 @@ public class MyFile{
 	 */
 	public void setType(File file) {
 		this.directory = file.isDirectory();
-		this.type = FileSystemView.getFileSystemView().getSystemIcon(file).toString();
+		this.type = FileSystemView.getFileSystemView().getSystemTypeDescription(file);
+		//this.type = Files.probeContentType(file.toPath());
+		//this.icon = FileSystemView.getFileSystemView().getSystemIcon(file);
 	}
 	
 	/**
@@ -208,6 +212,7 @@ public class MyFile{
 	}
 
 /*------------------------------------------------------------------------------------------*/
+	
 	
 	public void setName(String name) {
 		this.name = name;
