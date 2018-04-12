@@ -165,10 +165,7 @@ public class BrowserController implements Initializable{
 		File defaultDirectory = new File("D:/");
 		chooser.setInitialDirectory(defaultDirectory);
         MyFile file = fileTable.getSelectionModel().getSelectedItem();
-        long start = System.nanoTime();
         new DownloadClient(this.IP).start(file.getPath(), chooser.showDialog(null).getAbsolutePath()+"\\");
-		long finish = System.nanoTime();
-		System.out.println((finish-start)/1000000);
 	}
 	
 	public void upload() {
@@ -178,7 +175,7 @@ public class BrowserController implements Initializable{
 		int ret = chooser.showOpenDialog(null);
 		if(ret == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
-			new UploadClient().start(file, labelPath.getText());
+			new UploadClient(this.IP).start(file, labelPath.getText());
 		}
 	}
 	

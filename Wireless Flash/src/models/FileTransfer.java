@@ -29,13 +29,13 @@ public class FileTransfer {
 				return;
 			
 			MyFile myfile = new MyFile(file);
-			
+			System.out.println(myfile);
 			myfile.setPath(myfile.getPath().substring(mainPath.length()));
 			
-			if(myfile.getPath().startsWith("\\\\") || myfile.getPath().startsWith("/"))
+			
+			if(myfile.getPath().startsWith("\\") || myfile.getPath().startsWith("/"))
 				myfile.setPath(myfile.getPath().substring(1));
 
-		
 			String jsonFile = JsonParser.singleMyFileToJson(myfile);
 			
 			jsonFile = jsonFile.replaceAll(""+((char)13), "");
@@ -83,7 +83,7 @@ public class FileTransfer {
 		try {
 			for(String temp; (temp = inputStream.readLine()) != null; ) {
 				MyFile myfile = JsonParser.singleJsonToMyFile(temp);
-				
+
 				//myfile.decode();
 				if(myfile.isDirectory()) {
 					File file = new File(path+myfile.getPath());
@@ -96,7 +96,7 @@ public class FileTransfer {
 					long size = Long.parseLong(myfile.getSize());
 					
 					byte[] buffer = new byte[BUFFERSIZE];
-					while(true) {
+					while(size > 0) {
 						int bytesRead = inputStream.read(buffer);
 						
 						if(bytesRead != -1) {
@@ -104,8 +104,6 @@ public class FileTransfer {
 							output.write(buffer, 0, bytesRead);
 						}
 				
-						if(size <= 0 && (bytesRead == -1 || bytesRead < BUFFERSIZE))
-							break;
 					}
 					output.close();
 				}

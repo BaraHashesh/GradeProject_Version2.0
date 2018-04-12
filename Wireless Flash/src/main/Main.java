@@ -10,7 +10,7 @@ import models.MyFile;
 public class Main extends Application {
 	public static void main(String[] args) {
 		LogFileHandler.clearLog();
-		MyFile[] listOfFiles = new BrowsingClient().browserRequest("");
+		MyFile[] listOfFiles = new BrowsingClient("localhost").browserRequest("");
 	
 		if(listOfFiles==null)
 			return;
