@@ -32,7 +32,7 @@ public class FileTransfer {
 			
 			myfile.setPath(myfile.getPath().substring(mainPath.length()));
 			
-			if(myfile.getPath().startsWith("\\\\") || myfile.getPath().startsWith("/"));
+			if(myfile.getPath().startsWith("\\\\") || myfile.getPath().startsWith("/"))
 				myfile.setPath(myfile.getPath().substring(1));
 
 		

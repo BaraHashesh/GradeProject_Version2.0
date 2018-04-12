@@ -23,14 +23,18 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.DirectoryChooser;
+import models.BrowsingClient;
+import models.DownloadClient;
 import models.MyFile;
 import models.TCPClient;
+import models.UploadClient;
 
 public class BrowserController implements Initializable{
+	private String IP = "localhost";
 	private static Scene bowserScene;
 	private static ObservableList<MyFile> list;
 	private static String parentDirectory = "";
-	private static TCPClient client = null;
+	private static BrowsingClient browsingClient = null;
 	
 	@FXML 
 	Label labelPath;
@@ -72,8 +76,8 @@ public class BrowserController implements Initializable{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		client = new TCPClient();
-		
+		browsingClient = new BrowsingClient(this.IP);
+
 		TableColumn<MyFile, String> name = new TableColumn<>("name");
     	TableColumn<MyFile, Icon> type = new TableColumn<>("type");
     	TableColumn<MyFile, String> extension = new TableColumn<>("extension");
@@ -112,7 +116,7 @@ public class BrowserController implements Initializable{
 			parentDirectory = file.getParent();
 			if(parentDirectory == null)
 				parentDirectory = "";
-			setList(client.browserRequest(newPath));
+			setList(browsingClient.browserRequest(newPath));
 			updateLabel(newPath);
 			fileTable.setItems(list);
 		}
@@ -123,13 +127,13 @@ public class BrowserController implements Initializable{
 	 */
 	public void PreviosDirectory() {
 		if(list.toArray().length == 0) {
-			setList(client.browserRequest(parentDirectory));
+			setList(browsingClient.browserRequest(parentDirectory));
 			updateLabel(parentDirectory);
 		}
 		else {
 			String path = list.get(0).obtainPreviosDirectory();
 			updateLabel(path);
-			setList(client.browserRequest(path));
+			setList(browsingClient.browserRequest(path));
 		}
 		fileTable.setItems(list);
 	}
@@ -147,9 +151,9 @@ public class BrowserController implements Initializable{
 	 */
 	public void delete() {
 		MyFile file = fileTable.getSelectionModel().getSelectedItem();
+		browsingClient.deleteRequest(file.getPath());
 		list.remove(file);
 		fileTable.setItems(list);
-		new TCPClient().deleteRequest(file.getPath());
 	}
 	
 	/**
@@ -162,7 +166,7 @@ public class BrowserController implements Initializable{
 		chooser.setInitialDirectory(defaultDirectory);
         MyFile file = fileTable.getSelectionModel().getSelectedItem();
         long start = System.nanoTime();
-        client.downloadRequest(file.getPath(), chooser.showDialog(null).getAbsolutePath()+"\\");
+        new DownloadClient(this.IP).start(file.getPath(), chooser.showDialog(null).getAbsolutePath()+"\\");
 		long finish = System.nanoTime();
 		System.out.println((finish-start)/1000000);
 	}
@@ -174,7 +178,7 @@ public class BrowserController implements Initializable{
 		int ret = chooser.showOpenDialog(null);
 		if(ret == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
-			new TCPClient().uploadRequest(file, labelPath.getText());
+			new UploadClient().start(file, labelPath.getText());
 		}
 	}
 	

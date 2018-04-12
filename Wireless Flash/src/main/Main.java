@@ -3,14 +3,14 @@ package main;
 import controllers.BrowserController;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import models.BrowsingClient;
 import models.LogFileHandler;
 import models.MyFile;
-import models.TCPClient;
 
 public class Main extends Application {
 	public static void main(String[] args) {
 		LogFileHandler.clearLog();
-		MyFile[] listOfFiles = new TCPClient().browserRequest("");
+		MyFile[] listOfFiles = new BrowsingClient().browserRequest("");
 	
 		if(listOfFiles==null)
 			return;

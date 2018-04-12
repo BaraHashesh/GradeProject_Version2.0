@@ -8,8 +8,6 @@ import java.net.Socket;
 
 /**
  * This Class is used to Handle connection Sockets that the server creates Using Threads
- * @author BaraHashesh
- *
  */
 public class ServerHandler implements Runnable{
 	private static final String DOWNLOAD_REQUEST = "Download";
@@ -21,6 +19,10 @@ public class ServerHandler implements Runnable{
 	private Socket connectionSocket;
 	private Thread thread;
 	
+	/**
+	 * constructor for handler
+	 * @param socket is the connection socket between server and client
+	 */
 	public ServerHandler(Socket socket) {
 		this.connectionSocket = socket;
 	}
