@@ -29,7 +29,7 @@ import models.MyFile;
 import models.UploadClient;
 
 public class BrowserController implements Initializable{
-	private String IP;
+	private static String IP ;
 	private static Scene bowserScene;
 	private static ObservableList<MyFile> list;
 	private static String parentDirectory = "";
@@ -75,8 +75,8 @@ public class BrowserController implements Initializable{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		browsingClient = new BrowsingClient(this.IP);
-
+		browsingClient = new BrowsingClient(IP);
+		
 		TableColumn<MyFile, String> name = new TableColumn<>("name");
     	TableColumn<MyFile, Icon> type = new TableColumn<>("type");
     	TableColumn<MyFile, String> extension = new TableColumn<>("extension");
@@ -164,7 +164,7 @@ public class BrowserController implements Initializable{
 		File defaultDirectory = new File("D:/");
 		chooser.setInitialDirectory(defaultDirectory);
         MyFile file = fileTable.getSelectionModel().getSelectedItem();
-        new DownloadClient(this.IP).start(file.getPath(), chooser.showDialog(null).getAbsolutePath()+"\\");
+        new DownloadClient(IP).start(file.getPath(), chooser.showDialog(null).getAbsolutePath()+"\\");
 	}
 	
 	/**
@@ -177,7 +177,7 @@ public class BrowserController implements Initializable{
 		int ret = chooser.showOpenDialog(null);
 		if(ret == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
-			new UploadClient(this.IP).start(file, labelPath.getText());
+			new UploadClient(IP).start(file, labelPath.getText());
 		}
 	}
 	
@@ -187,10 +187,10 @@ public class BrowserController implements Initializable{
 	public void test() {}
 	
 	/**
-	 * method used to set IP for server
+	 * set method for server IP
 	 * @param hostIP is the server IP
 	 */
-	public void setIP(String hostIP) {
-		this.IP = hostIP;
+	public static void setIP(String hostIP) {
+		IP = hostIP;
 	}
 }

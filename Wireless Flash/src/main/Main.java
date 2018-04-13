@@ -15,7 +15,7 @@ public class Main extends Application {
 	public static void main(String[] args) throws UnknownHostException {
 		LogFileHandler.clearLog();
 		
-		IP = "localhost";
+		IP = "172.24.1.1";
 		
 		MyFile[] listOfFiles = new BrowsingClient(IP).browserRequest("");
 	
@@ -29,8 +29,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
+			BrowserController.setIP(IP);
 			BrowserController controller = new BrowserController();
-			controller.setIP(IP);
 			primaryStage.setScene(controller.getScene());
 			primaryStage.show();
 		}catch(Exception e) {
