@@ -26,11 +26,10 @@ import javafx.stage.DirectoryChooser;
 import models.BrowsingClient;
 import models.DownloadClient;
 import models.MyFile;
-import models.TCPClient;
 import models.UploadClient;
 
 public class BrowserController implements Initializable{
-	private String IP = "localhost";
+	private String IP;
 	private static Scene bowserScene;
 	private static ObservableList<MyFile> list;
 	private static String parentDirectory = "";
@@ -157,7 +156,7 @@ public class BrowserController implements Initializable{
 	}
 	
 	/**
-	 * method used to choose where to save file
+	 * method used to choose file to download
 	 */
 	public void download() {
 		DirectoryChooser chooser = new DirectoryChooser();
@@ -168,6 +167,9 @@ public class BrowserController implements Initializable{
         new DownloadClient(this.IP).start(file.getPath(), chooser.showDialog(null).getAbsolutePath()+"\\");
 	}
 	
+	/**
+	 * method used to choose file to upload
+	 */
 	public void upload() {
 		JFileChooser chooser = new JFileChooser(".");
 		chooser.setMultiSelectionEnabled(true);
@@ -179,9 +181,16 @@ public class BrowserController implements Initializable{
 		}
 	}
 	
+	/**
+	 * method used for testing
+	 */
+	public void test() {}
 	
-	public void test() {
-        MyFile file = fileTable.getSelectionModel().getSelectedItem();
-        new TCPClient().Test(file.getPath());
+	/**
+	 * method used to set IP for server
+	 * @param hostIP is the server IP
+	 */
+	public void setIP(String hostIP) {
+		this.IP = hostIP;
 	}
 }

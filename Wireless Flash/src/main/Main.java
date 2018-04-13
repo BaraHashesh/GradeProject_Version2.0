@@ -1,5 +1,7 @@
 package main;
 
+import java.net.UnknownHostException;
+
 import controllers.BrowserController;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -8,9 +10,14 @@ import models.LogFileHandler;
 import models.MyFile;
 
 public class Main extends Application {
-	public static void main(String[] args) {
+	private static String IP;
+	
+	public static void main(String[] args) throws UnknownHostException {
 		LogFileHandler.clearLog();
-		MyFile[] listOfFiles = new BrowsingClient("localhost").browserRequest("");
+		
+		IP = "localhost";
+		
+		MyFile[] listOfFiles = new BrowsingClient(IP).browserRequest("");
 	
 		if(listOfFiles==null)
 			return;
@@ -22,7 +29,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-			primaryStage.setScene(new BrowserController().getScene());
+			BrowserController controller = new BrowserController();
+			controller.setIP(IP);
+			primaryStage.setScene(controller.getScene());
 			primaryStage.show();
 		}catch(Exception e) {
 			LogFileHandler.printIntoLog("Main"+" - "+e.toString());

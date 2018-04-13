@@ -96,6 +96,7 @@ public class FileTransfer {
 					long size = Long.parseLong(myfile.getSize());
 					
 					byte[] buffer = new byte[BUFFERSIZE];
+					
 					while(size > 0) {
 						int bytesRead = inputStream.read(buffer);
 						
