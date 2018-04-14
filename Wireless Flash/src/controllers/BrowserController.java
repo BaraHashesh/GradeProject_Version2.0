@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 import javax.swing.Icon;
-import javax.swing.JFileChooser;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +22,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import models.BrowsingClient;
 import models.DownloadClient;
 import models.MyFile;
@@ -39,7 +39,7 @@ public class BrowserController implements Initializable{
 	Label labelPath;
 
 	@FXML
-	private Button back, download, remove, upload, test;
+	private Button back, download, remove, uploadFile, uploadFolder, test;
 	
 	@FXML
 	private TableView<MyFile> fileTable;
@@ -164,21 +164,35 @@ public class BrowserController implements Initializable{
 		File defaultDirectory = new File("D:/");
 		chooser.setInitialDirectory(defaultDirectory);
         MyFile file = fileTable.getSelectionModel().getSelectedItem();
-        new DownloadClient(IP).start(file.getPath(), chooser.showDialog(null).getAbsolutePath()+"\\");
+        File directoryChoosen = chooser.showDialog(null);
+        if(directoryChoosen != null)
+        	new DownloadClient(IP).start(file.getPath(), directoryChoosen.getAbsolutePath()+"\\");
 	}
 	
 	/**
 	 * method used to choose file to upload
 	 */
-	public void upload() {
-		JFileChooser chooser = new JFileChooser(".");
-		chooser.setMultiSelectionEnabled(true);
-		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		int ret = chooser.showOpenDialog(null);
-		if(ret == JFileChooser.APPROVE_OPTION) {
-			File file = chooser.getSelectedFile();
-			new UploadClient(IP).start(file, labelPath.getText());
-		}
+	public void uploadFile() {
+		FileChooser chooser = new FileChooser();
+		chooser.setTitle("File to Upload");
+		File defaultDirectory = new File("D:/");
+		chooser.setInitialDirectory(defaultDirectory);
+        File FileChoosen = chooser.showOpenDialog(null);
+        if(FileChoosen != null)
+        	new UploadClient().start(FileChoosen, labelPath.getText());
+	}
+	
+	/**
+	 * method used to choose folder to upload
+	 */
+	public void uploadFolder() {
+		DirectoryChooser chooser = new DirectoryChooser();
+		chooser.setTitle("Folder to Upload");
+		File defaultDirectory = new File("D:/");
+		chooser.setInitialDirectory(defaultDirectory);
+        File directoryChoosen = chooser.showDialog(null);
+        if(directoryChoosen != null)
+        	new UploadClient().start(directoryChoosen, labelPath.getText());
 	}
 	
 	/**

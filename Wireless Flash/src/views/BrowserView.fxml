@@ -8,16 +8,17 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="785.0" prefWidth="1290.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BrowserController">
    <children>
-      <Button fx:id="back" layoutX="32.0" layoutY="15.0" mnemonicParsing="false" onMouseClicked="#PreviosDirectory" prefHeight="53.0" prefWidth="113.0" text="back" />
-      <Button fx:id="remove" layoutX="238.0" layoutY="690.0" mnemonicParsing="false" onMouseClicked="#delete" prefHeight="86.0" prefWidth="210.0" text="remove" />
-      <Button fx:id="upload" layoutX="529.0" layoutY="690.0" mnemonicParsing="false" onMouseClicked="#upload" prefHeight="86.0" prefWidth="204.0" text="upload" />
-      <Button fx:id="download" layoutX="844.0" layoutY="690.0" mnemonicParsing="false" onMouseClicked="#download" prefHeight="86.0" prefWidth="204.0" text="download " />
+      <Button fx:id="back" layoutX="32.0" layoutY="15.0" mnemonicParsing="false" onMouseClicked="#PreviosDirectory" prefHeight="53.0" prefWidth="113.0" text="Back" />
+      <Button fx:id="remove" layoutX="163.0" layoutY="691.0" mnemonicParsing="false" onMouseClicked="#delete" prefHeight="86.0" prefWidth="210.0" text="Remove" />
+      <Button fx:id="uploadFile" layoutX="421.0" layoutY="690.0" mnemonicParsing="false" onMouseClicked="#uploadFile" prefHeight="86.0" prefWidth="204.0" text="Upload File" />
+      <Button fx:id="download" layoutX="958.0" layoutY="691.0" mnemonicParsing="false" onMouseClicked="#download" prefHeight="86.0" prefWidth="204.0" text="Download " />
       <TableView fx:id="fileTable" layoutX="18.0" layoutY="84.0" prefHeight="597.0" prefWidth="1265.0" />
       <Label fx:id="labelPath" layoutX="316.0" layoutY="19.0" prefHeight="21.0" prefWidth="817.0">
          <font>
             <Font size="31.0" />
          </font>
       </Label>
-      <Button fx:id="test" layoutX="66.0" layoutY="718.0" mnemonicParsing="false" onMouseClicked="#test" text="test" />
+      <Button fx:id="test" layoutX="66.0" layoutY="718.0" mnemonicParsing="false" onMouseClicked="#test" text="Test" />
+      <Button fx:id="uploadFolder" layoutX="698.0" layoutY="691.0" mnemonicParsing="false" onMouseClicked="#uploadFolder" prefHeight="86.0" prefWidth="204.0" text="Upload Folder" />
    </children>
 </AnchorPane>

@@ -29,7 +29,7 @@ public class FileTransfer {
 				return;
 			
 			MyFile myfile = new MyFile(file);
-			System.out.println(myfile);
+
 			myfile.setPath(myfile.getPath().substring(mainPath.length()));
 			
 			
