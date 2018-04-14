@@ -23,7 +23,6 @@ public class USBHandler{
 		File folder = new File(folderURL);
 		if(folder.exists()) 
 			return MyFile.parseFile(folder.listFiles());
-		LogFileHandler.printIntoLog("Class:FileLister - Method: fileLister - Directory not found");
 		return null;
 	}
 	

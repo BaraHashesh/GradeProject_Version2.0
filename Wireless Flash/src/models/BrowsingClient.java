@@ -52,7 +52,6 @@ public class BrowsingClient {
 			inFromServer.close();
 			clientSocket.close();
 		}catch(Exception e) {
-			LogFileHandler.printIntoLog(e.toString());
 			e.printStackTrace();
 		}
 		return JsonParser.JsonToMyFile(response);
@@ -73,7 +72,6 @@ public class BrowsingClient {
 			outToServer.close();
 			clientSocket.close();
 		}catch(Exception e) {
-			LogFileHandler.printIntoLog(e.toString());
 			e.printStackTrace();
 		}
 	}

@@ -64,7 +64,6 @@ public class UploadClient implements  Runnable{
 			outToServer.close();
 			clientSocket.close();
 		}catch(Exception e) {
-			LogFileHandler.printIntoLog(e.toString());
 			e.printStackTrace();
 		}
 	}
