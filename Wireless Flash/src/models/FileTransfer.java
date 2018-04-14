@@ -8,7 +8,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+/**
+ * This class is used to transfer and recieve files
+ */
 public class FileTransfer {
+	
 	private static final int BUFFERSIZE = 1024*32;
 	/**
 	 * method used to recursively upload files/folders
@@ -114,5 +118,26 @@ public class FileTransfer {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * This method is used to calculate Total size for files/folders
+	 * @param file is a file/folder
+	 * @return the total size of the file/folder
+	 */
+	public static long calculateSize(File file) {
+		long sum = 0;
+		if(file.isDirectory()) {
+			for(File temp : file.listFiles()) {
+				if(temp.isDirectory())
+					sum += calculateSize(temp);
+				else
+					sum += temp.length();
+			}
+		}
+		else{
+			sum += file.length();
+		}
+		return sum;
 	}
 }
