@@ -50,7 +50,18 @@ public class MyFile{
 	 */
 	public void encode() {
 		this.name = new String(Base64.getEncoder().encode(this.name.getBytes()));
+		
+		/*String[] temp = this.path.split("\\\\");
+		String result = new String(Base64.getEncoder().encode(temp[0].getBytes()));
+		
+		for(int i = 1; i < temp.length; i++)
+			result += "\\"+  new String(Base64.getEncoder().encode(temp[i].getBytes()));
+		
+		this.path = result;*/
+		
 		this.path = new String(Base64.getEncoder().encode(this.path.getBytes()));
+		
+		
 		this.parent = new String(Base64.getEncoder().encode(this.parent.getBytes()));
 	}
 	
