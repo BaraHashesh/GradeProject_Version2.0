@@ -49,9 +49,9 @@ public class MyFile{
 	 * used to encode strings to base64 to handle none english letters
 	 */
 	public void encode() {
-		this.name = Base64.getEncoder().encodeToString(this.name.getBytes());
-		this.path = Base64.getEncoder().encodeToString(this.path.getBytes());
-		this.parent = Base64.getEncoder().encodeToString(this.parent.getBytes());
+		this.name = new String(Base64.getEncoder().encode(this.name.getBytes()));
+		this.path = new String(Base64.getEncoder().encode(this.path.getBytes()));
+		this.parent = new String(Base64.getEncoder().encode(this.parent.getBytes()));
 	}
 	
 	/**

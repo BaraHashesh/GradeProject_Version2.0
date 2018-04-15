@@ -48,6 +48,7 @@ public class BrowsingClient {
 			
 			for(String temp; (temp = inFromServer.readLine())!=null;)
 				response+=temp;
+			
 			outToServer.close();
 			inFromServer.close();
 			clientSocket.close();
