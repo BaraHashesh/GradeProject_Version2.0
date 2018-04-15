@@ -26,7 +26,7 @@ public class FileTransfer {
 		try {
 			
 			String temp = inputStream.readLine();
-
+			
 			boolean toSend = Boolean.parseBoolean(temp);
 			//check if client is willing to recieve file
 			if(!toSend)
@@ -107,7 +107,8 @@ public class FileTransfer {
 						if(bytesRead != -1) {
 							size -= bytesRead;
 							output.write(buffer, 0, bytesRead);
-						}
+						}else
+							break;
 				
 					}
 					output.close();
