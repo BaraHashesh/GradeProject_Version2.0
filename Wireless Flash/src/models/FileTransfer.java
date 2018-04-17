@@ -86,7 +86,6 @@ public class FileTransfer {
 			String path){
 		try {
 			for(String temp; (temp = inputStream.readLine()) != null; ) {
-				System.out.println(temp);
 				MyFile myfile = JsonParser.singleJsonToMyFile(temp);
 
 				//myfile.decode();

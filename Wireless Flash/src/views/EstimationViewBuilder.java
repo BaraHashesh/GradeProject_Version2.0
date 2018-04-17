@@ -13,7 +13,7 @@ import javafx.stage.Stage;
  */
 public class EstimationViewBuilder {
 	private static double spacing = 5;
-	private static double width = 385.0 * 2;
+	private static double width = 500.0 * 2;
 	private Stage estimationStage;
 	private Label fileSizeLabel, informationLabel, doneLabel, remainingLabel;
 	
@@ -33,7 +33,7 @@ public class EstimationViewBuilder {
 		this.fileSizeLabel.setPrefWidth(width);
 		this.fileSizeLabel.setFont(new Font("Cambria", 32));
 		this.informationLabel.setPrefWidth(width);
-		this.informationLabel.setFont(new Font("Cambria", 32));
+		this.informationLabel.setFont(new Font("Cambria", 16));
 		
 		this.doneLabel.setStyle("-fx-background-color: blue;");
 		this.remainingLabel.setStyle("-fx-background-color: white;");

@@ -2,16 +2,19 @@ package controllers;
 
 import java.io.DataOutputStream;
 
+import javafx.application.Platform;
 import views.EstimationViewBuilder;
 
 /**
  * Class used to control estimation view
  */
-public class EstimationViewController {
+public class EstimationViewController implements Runnable{
 	private EstimationViewBuilder estimationView;
 	private long fileSize;
 	private DataOutputStream outputStream;
 	private Boolean isDownload;
+	private long fileSizeDone;
+	private long timePassed;
 	
 	/**
 	 * constructor for estimation view controller
@@ -52,7 +55,7 @@ public class EstimationViewController {
 	 * @param size is the size of file/folder to handle
 	 */
 	public void initialize() {
-		double sizeToDisplay = fileSize;
+		double sizeToDisplay = this.fileSize;
 		String sizeInfo = "Bytes";
 		
 		if(sizeToDisplay >= 1024) {
@@ -85,5 +88,47 @@ public class EstimationViewController {
 		value = (double) Math.round(value);
 		value = value/Math.pow(10, position);
 		return value;
+	}
+	
+	public void update(long dataDone, long time) {
+		this.fileSizeDone = dataDone;
+		this.timePassed = (long) (((double)this.fileSizeDone/(double)time) * 
+				((double)(this.fileSize - this.fileSizeDone)));
+		Platform.runLater(this);
+	}
+
+	@Override
+	public void run() {
+		double dataToDisplay = this.fileSizeDone;
+		String dataInfo = "Bytes";
+		
+		if(dataToDisplay >= 1024) {
+			dataToDisplay /= 1024.0;
+			dataInfo = "K-Bytes";
+		}
+
+		if(dataToDisplay >= 1024) {
+			dataToDisplay /= 1024.0;
+			dataInfo = "M-Bytes";
+		}
+		
+		String info = round(dataToDisplay, 2) + dataInfo +" have been transfered/recieved - ";
+		
+		long hours = this.timePassed / 360;
+		this.timePassed  = this.timePassed %360;
+		int minutes = (int) (this.timePassed / 60);
+		this.timePassed = this.timePassed %60;
+		
+		info = info + "aproximatly " + hours + " hours and " + minutes + " minutes and " + this.timePassed
+				+ " seconds are remaining to finish work";
+		
+		this.estimationView.getInformationLabel().setText(info);
+		
+		double precentage = estimationView.getWidth()*(double)this.fileSizeDone/(double)this.fileSize;
+		
+		this.estimationView.getDoneLabel().setPrefWidth(precentage);
+		
+		this.estimationView.getRemainingLabel().setPrefWidth(this.estimationView.getWidth() - precentage);
+		
 	}
 }
