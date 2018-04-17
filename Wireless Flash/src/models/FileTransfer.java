@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
  * This class is used to transfer and recieve files
  */
 public class FileTransfer {
+	private long transferedFileSize = 0;
 	
 	private static final int BUFFERSIZE = 1024*32;
 	/**
@@ -20,7 +21,7 @@ public class FileTransfer {
 	 * @param file is the main file/folder to be uploaded 
 	 * @param mainPath is the parents path (to estaplish relationship of files)
 	 */
-	public static void sendFiles(BufferedReader inputStream,DataOutputStream outputStream, 
+	public void sendFiles(BufferedReader inputStream,DataOutputStream outputStream, 
 			File file, String mainPath) {
 		
 		try {
@@ -61,10 +62,12 @@ public class FileTransfer {
 						filedata.read(buffer, 0, buffer.length);
 						outputStream.write(buffer, 0, buffer.length);
 						size -= buffer.length;
+						this.transferedFileSize += buffer.length;
 					}
 					else {
 						filedata.read(buffer, 0, (int)size);
 						outputStream.write(buffer, 0, (int)size);
+						this.transferedFileSize += size;
 						size = 0;
 					}
 				}
@@ -82,7 +85,7 @@ public class FileTransfer {
 	 * @throws FileNotFoundException 
 	 */
 	@SuppressWarnings("deprecation")
-	public static void receiveFiles(DataOutputStream outputStream, DataInputStream inputStream, 
+	public void receiveFiles(DataOutputStream outputStream, DataInputStream inputStream, 
 			String path){
 		try {
 			for(String temp; (temp = inputStream.readLine()) != null; ) {
@@ -107,6 +110,7 @@ public class FileTransfer {
 						if(bytesRead != -1) {
 							size -= bytesRead;
 							output.write(buffer, 0, bytesRead);
+							transferedFileSize += bytesRead;
 						}else
 							break;
 				
@@ -126,7 +130,7 @@ public class FileTransfer {
 	 * @param file is a file/folder
 	 * @return the total size of the file/folder
 	 */
-	public static long calculateSize(File file) {
+	public long calculateSize(File file) {
 		long sum = 0;
 		if(file.isDirectory()) {
 			for(File temp : file.listFiles()) {
@@ -141,4 +145,14 @@ public class FileTransfer {
 		}
 		return sum;
 	}
+	
+	/**
+	 * get method for transferedFileSize
+	 * @return the number of bytes that have been written/read so far
+	 */
+	public long getTransferedFileSize() {
+		return transferedFileSize;
+	}
+	
+	
 }

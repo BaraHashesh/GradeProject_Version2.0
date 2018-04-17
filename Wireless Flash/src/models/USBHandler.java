@@ -54,7 +54,7 @@ public class USBHandler{
 	public static void uploadFile(BufferedReader fromClient, DataOutputStream outToClient, String path) {
 		File mainFile = new File(path);
 		String parent = mainFile.getParent();
-		FileTransfer.sendFiles(fromClient, outToClient, mainFile, parent);
+		new FileTransfer().sendFiles(fromClient, outToClient, mainFile, parent);
 	}
 	
 	/**
@@ -75,6 +75,6 @@ public class USBHandler{
 			e.printStackTrace();
 		}
 		
-		FileTransfer.receiveFiles(toClient, fromClient, path);
+		new FileTransfer().receiveFiles(toClient, fromClient, path);
 	}
 }

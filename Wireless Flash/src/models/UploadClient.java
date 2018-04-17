@@ -60,7 +60,11 @@ public class UploadClient implements  Runnable{
 			outToServer.write(request.getBytes("UTF-8"));
 			outToServer.writeByte('\n');
 			String parent = file.getParent();
-			FileTransfer.sendFiles(inFromServer, outToServer, file, parent);
+			FileTransfer fileTransfer = new FileTransfer();
+			EstimationViewManagementThread manage = new EstimationViewManagementThread(
+					fileTransfer.calculateSize(file), fileTransfer);
+			manage.start();
+			fileTransfer.sendFiles(inFromServer, outToServer, file, parent);
 			outToServer.close();
 			clientSocket.close();
 		}catch(Exception e) {
