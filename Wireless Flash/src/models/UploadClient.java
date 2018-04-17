@@ -62,7 +62,7 @@ public class UploadClient implements  Runnable{
 			String parent = file.getParent();
 			FileTransfer fileTransfer = new FileTransfer();
 			EstimationViewManagementThread manage = new EstimationViewManagementThread(
-					fileTransfer.calculateSize(file), fileTransfer);
+					fileTransfer.calculateSize(file), fileTransfer, outToServer);
 			manage.start();
 			fileTransfer.sendFiles(inFromServer, outToServer, file, parent);
 			outToServer.close();

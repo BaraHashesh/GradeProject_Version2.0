@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * This Class is used to access the USB and get data or directories from it
@@ -54,7 +55,14 @@ public class USBHandler{
 	public static void uploadFile(BufferedReader fromClient, DataOutputStream outToClient, String path) {
 		File mainFile = new File(path);
 		String parent = mainFile.getParent();
-		new FileTransfer().sendFiles(fromClient, outToClient, mainFile, parent);
+		FileTransfer fileTransfer = new FileTransfer();
+		try {
+			outToClient.writeLong(fileTransfer.calculateSize(mainFile));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		fileTransfer.sendFiles(fromClient, outToClient, mainFile, parent);
 	}
 	
 	/**

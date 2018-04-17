@@ -57,6 +57,10 @@ public class DownloadClient implements Runnable{
 			outToServer.writeBytes("true\n");
 			DataInputStream inFromServer = new DataInputStream(clientSocket.getInputStream());
 			FileTransfer fileTransfer = new FileTransfer();
+			long size = inFromServer.readLong();
+			EstimationViewManagementThread manage = new EstimationViewManagementThread(
+					size, fileTransfer, outToServer);
+			manage.start();
 			fileTransfer.receiveFiles(outToServer, inFromServer, locationToSave);
 			outToServer.close();
 			clientSocket.close();

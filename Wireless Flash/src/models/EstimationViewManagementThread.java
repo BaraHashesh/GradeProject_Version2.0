@@ -1,5 +1,7 @@
 package models;
 
+import java.io.DataOutputStream;
+
 import controllers.EstimationViewController;
 
 public class EstimationViewManagementThread implements Runnable{
@@ -9,8 +11,8 @@ public class EstimationViewManagementThread implements Runnable{
 	private FileTransfer fileTransfer;
 	private long totalSize;
 	
-	public EstimationViewManagementThread(long size, FileTransfer ft) {
-		est = new EstimationViewController(size, null);
+	public EstimationViewManagementThread(long size, FileTransfer ft, DataOutputStream os) {
+		est = new EstimationViewController(size, os);
 		this.totalSize = size;
 		this.fileTransfer = ft;
 	}
