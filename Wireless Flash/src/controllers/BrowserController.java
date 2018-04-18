@@ -179,7 +179,7 @@ public class BrowserController implements Initializable{
 		chooser.setInitialDirectory(defaultDirectory);
         File FileChoosen = chooser.showOpenDialog(null);
         if(FileChoosen != null)
-        	new UploadClient().start(FileChoosen, labelPath.getText());
+        	new UploadClient(IP).start(FileChoosen, labelPath.getText());
 	}
 	
 	/**

@@ -205,6 +205,10 @@ public class MyFile{
 	 */
 	public String obtainPreviosDirectory() {
 		int i = this.parent.lastIndexOf("\\");
+		
+		if(i == 0 || i == -1)
+			i = this.parent.lastIndexOf("/");
+
 		return this.parent.substring(0, i+1);
 	}
 	

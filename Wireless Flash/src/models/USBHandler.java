@@ -77,6 +77,9 @@ public class USBHandler{
 		if(path.compareTo(ROOT) != 0)
 			path = path + "\\";
 		
+		if(path.length() < ROOT.length())
+			path = ROOT;
+		
 		try {
 			toClient.writeBytes("true\n");
 		}catch(Exception e) {
