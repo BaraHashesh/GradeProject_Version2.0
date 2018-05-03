@@ -73,7 +73,7 @@ public class JsonParser {
 			//file.decode();
 			return file;
 		}catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			return null;
 		}
 	}

@@ -222,8 +222,25 @@ public class MyFile{
 
 	@Override
 	public String toString() {
-		return "MyFile [name=" + name + ", path=" + path + ", parent=" + parent + ", type=" + type + ", size=" + size
-				+ ", lastModified=" + lastModified + ", directory=" + directory + "]";
+		String result = "{" + "\"name\":\"" + this.name + "\"," + 
+				"\"path\":\"" + this.path + "\"," + "\"parent\":\"" + this.path + "\",";
+		
+		if(this.type != null)
+			result += "\"type\" : " + "\"" + this.type + "\",";
+		else
+			result += "\"type\" : null,";
+		
+
+		if(this.extension.compareTo("") != 0)
+			result += "\"extension\" : " + "\"" + this.extension + "\",";
+		else
+			result += "\"extension\" : \"\",";
+		
+			
+		result += "\"size\":\"0\"," + "\"lastModified\":" + this.lastModified + "," + 
+					"\"directory\":" + this.directory  + "}";
+		
+		return result;
 	}
 
 /*------------------------------------------------------------------------------------------*/
