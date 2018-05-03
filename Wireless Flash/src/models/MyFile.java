@@ -220,32 +220,17 @@ public class MyFile{
 		return extension;
 	}
 
+	
 	@Override
 	public String toString() {
-		String result = "{" + "\"name\":\"" + this.name + "\"," + 
-				"\"path\":\"" + this.path + "\"," + "\"parent\":\"" + this.path + "\",";
-		
-		if(this.type != null)
-			result += "\"type\" : " + "\"" + this.type + "\",";
-		else
-			result += "\"type\" : null,";
-		
-
-		if(this.extension.compareTo("") != 0)
-			result += "\"extension\" : " + "\"" + this.extension + "\",";
-		else
-			result += "\"extension\" : \"\",";
-		
-			
-		result += "\"size\":\"0\"," + "\"lastModified\":" + this.lastModified + "," + 
-					"\"directory\":" + this.directory  + "}";
-		
-		return result;
+		return "MyFile [name=" + name + ", path=" + path + ", parent=" + parent + ", type=" + type + ", extension="
+				+ extension + ", size=" + size + ", lastModified=" + lastModified + ", directory=" + directory + "]";
 	}
 
+	
 /*------------------------------------------------------------------------------------------*/
 	
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}

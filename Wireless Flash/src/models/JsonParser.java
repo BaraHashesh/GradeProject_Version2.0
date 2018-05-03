@@ -17,7 +17,7 @@ public class JsonParser {
 		try {
 			/*for(int i = 0; i < list.length; i++)
 				list[i].encode();*/
-			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			ObjectWriter ow = new ObjectMapper().writer();
 			String json = ow.writeValueAsString(list);
 			return json;
 		}catch (Exception e) {
@@ -52,7 +52,7 @@ public class JsonParser {
 	public static String singleMyFileToJson(MyFile file){
 		try {
 			//file.encode();
-			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			ObjectWriter ow = new ObjectMapper().writer();
 			String json = ow.writeValueAsString(file);
 			return json;
 		}catch (Exception e) {

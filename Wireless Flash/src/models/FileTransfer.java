@@ -42,8 +42,9 @@ public class FileTransfer {
 
 			String jsonFile = JsonParser.singleMyFileToJson(myfile);
 			
-			jsonFile = jsonFile.replaceAll(""+((char)13), "");
-			jsonFile = jsonFile.replaceAll(""+((char)10), "");
+			//jsonFile = jsonFile.replaceAll(""+((char)13), "");
+			//jsonFile = jsonFile.replaceAll(""+((char)10), "");
+			
 			outputStreamStrings.write(jsonFile.getBytes("UTF-8"));
 			
 			outputStreamStrings.writeBytes("\n");

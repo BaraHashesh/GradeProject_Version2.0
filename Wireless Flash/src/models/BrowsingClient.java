@@ -51,7 +51,7 @@ public class BrowsingClient {
 			BufferedReader inFromServer = new BufferedReader(
 	                 new InputStreamReader(
 	                		 clientSocketStrings.getInputStream(), StandardCharsets.UTF_8));
-			
+		
 			request = "Browser" + "\n" + path;
 			outToServer.write(request.getBytes("UTF-8"));
 			outToServer.writeByte('\n');
