@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * This class is used to browse the flash and to delete files if nessarry
@@ -38,9 +39,18 @@ public class BrowsingClient {
 		String response = "";
 		try {
 			Socket clientSocket = new Socket(IP, 6789);
+			@SuppressWarnings({ "unused", "resource" })
+			Socket clientSocketBytes = new Socket(IP, 9999);
+			
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+			
+			/*BufferedReader inFromServer = new BufferedReader(
+					new InputStreamReader(clientSocket.getInputStream()));*/
+			
 			BufferedReader inFromServer = new BufferedReader(
-					new InputStreamReader(clientSocket.getInputStream()));
+	                 new InputStreamReader(
+	                    clientSocket.getInputStream(), StandardCharsets.UTF_8));
+			
 			request = "Browser" + "\n" + path;
 			outToServer.write(request.getBytes("UTF-8"));
 			outToServer.writeByte('\n');
@@ -66,6 +76,8 @@ public class BrowsingClient {
 		String request;
 		try {
 			Socket clientSocket = new Socket(IP, 6789);
+			@SuppressWarnings({ "unused", "resource" })
+			Socket clientSocketBytes = new Socket(IP, 9999);
 			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			request = "Delete" + "\n" + path;
 			outToServer.write(request.getBytes("UTF-8"));

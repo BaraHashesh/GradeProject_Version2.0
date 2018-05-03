@@ -8,6 +8,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+
+
 /**
  * This class is used to transfer and recieve files
  */
@@ -21,7 +23,8 @@ public class FileTransfer {
 	 * @param file is the main file/folder to be uploaded 
 	 * @param mainPath is the parents path (to estaplish relationship of files)
 	 */
-	public void sendFiles(BufferedReader inputStream,DataOutputStream outputStream, 
+	public void sendFiles(BufferedReader inputStream,DataOutputStream outputStreamStrings,
+			DataOutputStream outputStreamBytes,
 			File file, String mainPath) {
 		
 		try {
@@ -45,14 +48,14 @@ public class FileTransfer {
 			
 			jsonFile = jsonFile.replaceAll(""+((char)13), "");
 			jsonFile = jsonFile.replaceAll(""+((char)10), "");
-			outputStream.write(jsonFile.getBytes());
-			outputStream.writeBytes("\n");
+			outputStreamStrings.write(jsonFile.getBytes("UTF-8"));
 			
-			outputStream.flush();
+			outputStreamStrings.writeBytes("\n");
+			
 			if(file.isDirectory()) {
 				File[] list = file.listFiles();
 				for(int i = 0; i < list.length; i++) 
-					sendFiles(inputStream, outputStream, list[i], mainPath);
+					sendFiles(inputStream, outputStreamStrings, outputStreamBytes, list[i], mainPath);
 			}else{
 				FileInputStream filedata = new FileInputStream(file);
 				byte[] buffer = new byte[BUFFERSIZE];
@@ -60,18 +63,17 @@ public class FileTransfer {
 				while(size != 0) {
 					if(size >= buffer.length) {
 						filedata.read(buffer, 0, buffer.length);
-						outputStream.write(buffer, 0, buffer.length);
+						outputStreamBytes.write(buffer, 0, buffer.length);
 						size -= buffer.length;
 						this.transferedFileSize += buffer.length;
 					}
 					else {
 						filedata.read(buffer, 0, (int)size);
-						outputStream.write(buffer, 0, (int)size);
+						outputStreamBytes.write(buffer, 0, (int)size);
 						this.transferedFileSize += size;
 						size = 0;
 					}
 				}
-				outputStream.flush();
 				filedata.close();
 			}
 		}catch(Exception e) {
@@ -84,8 +86,8 @@ public class FileTransfer {
 	 * @param path is location to save data under
 	 * @throws FileNotFoundException 
 	 */
-	@SuppressWarnings("deprecation")
-	public void receiveFiles(DataOutputStream outputStream, DataInputStream inputStream, 
+	public void receiveFiles(DataOutputStream outputStreamStrings, DataInputStream byteStream,
+			BufferedReader inputStream, 
 			String path){
 		try {
 			for(String temp; (temp = inputStream.readLine()) != null; ) {
@@ -97,28 +99,24 @@ public class FileTransfer {
 					file.mkdirs();
 				}
 				else {
-					
 					FileOutputStream output = new FileOutputStream(path+myfile.getPath());
-					
 					long size = Long.parseLong(myfile.getSize());
-					
 					byte[] buffer = new byte[BUFFERSIZE];
-					
+
 					while(size > 0) {
-						int bytesRead = inputStream.read(buffer);
-						
-						if(bytesRead != -1) {
+						int bytesRead = byteStream.read(buffer, 0, BUFFERSIZE/2);
+
+						if (bytesRead != -1) {
+							this.transferedFileSize += bytesRead;
 							size -= bytesRead;
 							output.write(buffer, 0, bytesRead);
-							transferedFileSize += bytesRead;
 						}else
 							break;
-				
+										
 					}
 					output.close();
 				}
-				outputStream.writeBytes("true\n");
-				outputStream.flush();
+				outputStreamStrings.writeBytes("true\n");
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

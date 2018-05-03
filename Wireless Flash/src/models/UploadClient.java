@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * This class is used to upload files to server on a separate thread
@@ -50,23 +51,29 @@ public class UploadClient implements  Runnable{
 	public void run() {
 		String request;
 		try {
-			Socket clientSocket = new Socket(IP, 6789);
-			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+			Socket clientSocketStrings = new Socket(IP, 6789);
+			Socket clientSocketBytes = new Socket(IP, 9999);
+			
+			DataOutputStream outToServerString = new DataOutputStream(clientSocketStrings.getOutputStream());
+			
+			DataOutputStream outToServerBytes = new DataOutputStream(clientSocketBytes.getOutputStream());
 			
 			BufferedReader inFromServer = new BufferedReader(
-					new InputStreamReader(clientSocket.getInputStream()));
+	                 new InputStreamReader(
+	                		 clientSocketStrings.getInputStream(), StandardCharsets.UTF_8));
 			
 			request = "Upload" + "\n" + locationToSave;
-			outToServer.write(request.getBytes("UTF-8"));
-			outToServer.writeByte('\n');
+			outToServerString.write(request.getBytes("UTF-8"));
+			outToServerString.writeByte('\n');
 			String parent = file.getParent();
 			FileTransfer fileTransfer = new FileTransfer();
 			EstimationViewManagementThread manage = new EstimationViewManagementThread(
-					fileTransfer.calculateSize(file), fileTransfer, outToServer);
+					fileTransfer.calculateSize(file), fileTransfer, clientSocketStrings);
 			manage.start();
-			fileTransfer.sendFiles(inFromServer, outToServer, file, parent);
-			outToServer.close();
-			clientSocket.close();
+			fileTransfer.sendFiles(inFromServer, outToServerString, outToServerBytes, file, parent);
+			outToServerString.close();
+			clientSocketStrings.close();
+			clientSocketBytes.close();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * This Class is used to Handle connection Sockets that the server creates Using Threads
@@ -17,14 +18,16 @@ public class ServerHandler implements Runnable{
 	private static final String TEST_REQUEST = "Test";
 	
 	private Socket connectionSocket;
+	private Socket byteSocket;
 	private Thread thread;
 	
 	/**
 	 * constructor for handler
 	 * @param socket is the connection socket between server and client
 	 */
-	public ServerHandler(Socket socket) {
+	public ServerHandler(Socket socket, Socket bytes) {
 		this.connectionSocket = socket;
+		this.byteSocket = bytes;
 	}
 	
 	public void start() {
@@ -40,17 +43,21 @@ public class ServerHandler implements Runnable{
 		
 		try {
 			BufferedReader inFromClient = new BufferedReader(
-					new InputStreamReader(connectionSocket.getInputStream(), "UTF-8"));
+	                 new InputStreamReader(
+	 	                    connectionSocket.getInputStream(), StandardCharsets.UTF_8));
 		
-			DataInputStream is = new DataInputStream(connectionSocket.getInputStream());
+			DataInputStream is = new DataInputStream(byteSocket.getInputStream());
 		
-			DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+			DataOutputStream outToClientStrings = new DataOutputStream(connectionSocket.getOutputStream());
+			DataOutputStream outToClientBytes = new DataOutputStream(byteSocket.getOutputStream());
+			
+			
 			clientRequest = inFromClient.readLine();
 		
 			if(clientRequest.compareTo(BROWSER_REQUEST) == 0) {//browser request
 				String path = inFromClient.readLine();
 				response = JsonParser.myFileToJson(USBHandler.fileLister(path)) + "\n";
-				outToClient.writeBytes(response);
+				outToClientStrings.write(response.getBytes("UTF-8"));
 			}	
 	
 			if(clientRequest.compareTo(DELETE_REQUEST) == 0) {//delete reques
@@ -61,23 +68,25 @@ public class ServerHandler implements Runnable{
 		
 			if(clientRequest.compareTo(DOWNLOAD_REQUEST) == 0) {//download request
 				String path = inFromClient.readLine();
-				USBHandler.uploadFile(inFromClient, outToClient, path);
+				USBHandler.uploadFile(inFromClient, outToClientStrings, outToClientBytes, path);
 			}
 			
 			if(clientRequest.compareTo(UPLOAD_REQUEST) == 0) {//upload request
 				String path = inFromClient.readLine();
-				USBHandler.downloadFile(outToClient, is, path);
+				USBHandler.downloadFile(outToClientStrings, is, inFromClient, path);
 			}
 		
 			if(clientRequest.compareTo(TEST_REQUEST) == 0) {
 				String path = inFromClient.readLine();
-				USBHandler.uploadFile(inFromClient, outToClient, path);
+				USBHandler.uploadFile(inFromClient, outToClientStrings, outToClientBytes, path);
 			}
 			
 			is.close();
 			inFromClient.close();
-			outToClient.close();
+			outToClientStrings.close();
 			connectionSocket.close();
+			outToClientBytes.close();
+			byteSocket.close();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

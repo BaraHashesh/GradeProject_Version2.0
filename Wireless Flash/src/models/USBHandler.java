@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class USBHandler{	
 	
-	public static final String ROOT = "H:\\";
+	public static final String ROOT = "D:\\";
 	/**
 	 * Method used to get the file list in a folder in the USB
 	 * @param folderURL Path to folder (given root is an empty string i.e. "")
@@ -52,17 +52,19 @@ public class USBHandler{
 	 * @param outToClient is output stream for socket
 	 * @param path is the path of the file/folder to be uploaded
 	 */
-	public static void uploadFile(BufferedReader fromClient, DataOutputStream outToClient, String path) {
+	public static void uploadFile(BufferedReader fromClient, DataOutputStream outToClientStrings,
+			DataOutputStream outToClientBytes, String path) {
 		File mainFile = new File(path);
 		String parent = mainFile.getParent();
 		FileTransfer fileTransfer = new FileTransfer();
 		try {
-			outToClient.writeLong(fileTransfer.calculateSize(mainFile));
+			outToClientStrings.write(new String(fileTransfer.calculateSize(mainFile)+"").getBytes("UTF-8"));
+			outToClientStrings.writeByte('\n');
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		fileTransfer.sendFiles(fromClient, outToClient, mainFile, parent);
+		fileTransfer.sendFiles(fromClient, outToClientStrings, outToClientBytes, mainFile, parent);
 	}
 	
 	/**
@@ -70,7 +72,8 @@ public class USBHandler{
 	 * @param fromClient is input strean
 	 * @param path is location to be saved with refrence to the USB
 	 */
-	public static void downloadFile(DataOutputStream toClient, DataInputStream fromClient, String path) {
+	public static void downloadFile(DataOutputStream toClient, DataInputStream bytesStream,
+			BufferedReader fromClient, String path) {
 		if(path.compareTo("") == 0)
 			path = ROOT;
 		
@@ -86,6 +89,6 @@ public class USBHandler{
 			e.printStackTrace();
 		}
 		
-		new FileTransfer().receiveFiles(toClient, fromClient, path);
+		new FileTransfer().receiveFiles(toClient, bytesStream, fromClient, path);
 	}
 }

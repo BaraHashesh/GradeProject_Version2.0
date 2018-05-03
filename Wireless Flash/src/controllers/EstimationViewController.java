@@ -1,6 +1,7 @@
 package controllers;
 
-import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 
 import javafx.application.Platform;
 import views.EstimationViewBuilder;
@@ -11,7 +12,7 @@ import views.EstimationViewBuilder;
 public class EstimationViewController implements Runnable{
 	private EstimationViewBuilder estimationView;
 	private long fileSize;
-	private DataOutputStream outputStream;
+	private Socket socket;
 	private long fileSizeDone;
 	private long timePassed;
 	private boolean intialized = false;
@@ -20,10 +21,10 @@ public class EstimationViewController implements Runnable{
 	 * constructor for estimation view controller
 	 * @param stream is the output stream frim client to server
 	 */
-	public EstimationViewController(long fileSize, DataOutputStream stream) {
+	public EstimationViewController(long fileSize, Socket sock) {
 		this.fileSize = fileSize;
 		this.estimationView = new EstimationViewBuilder();
-		this.outputStream = stream;
+		this.socket = sock;
 		Platform.runLater(this);
 	}
 	
@@ -33,6 +34,13 @@ public class EstimationViewController implements Runnable{
 	public void display() {
 		this.estimationView.build();
 		initialize();
+		this.estimationView.getEstimationStage().setOnCloseRequest(e -> {
+			try {
+				this.socket.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		});
 		this.estimationView.getEstimationStage().show();
 	}
 	
@@ -83,6 +91,11 @@ public class EstimationViewController implements Runnable{
 		return value;
 	}
 	
+	/**
+	 * method used to update information of GUI
+	 * @param dataDone is the size of data that has been transfered/received so far
+	 * @param time is the amount of time that has passed
+	 */
 	public void update(long dataDone, long time) {
 		this.fileSizeDone = dataDone;
 		this.timePassed = (long) (((double)(this.fileSize - this.fileSizeDone)) / 

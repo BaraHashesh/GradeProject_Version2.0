@@ -8,15 +8,16 @@ import models.ServerHandler;
  * Class used to create a simple server on the device
  */
 class TCPServer {	
+	@SuppressWarnings("resource")
 	public static void main(String argv[]) throws Exception {
 		
-		@SuppressWarnings("resource")
 		ServerSocket welcomeSocket = new ServerSocket(6789);
+		ServerSocket welcomeByteSocket = new ServerSocket(9999);
 		
 		while (true) {
 			Socket connectionSocket = welcomeSocket.accept();
-			
-			new ServerHandler(connectionSocket).start();
+			Socket byteSocket =  welcomeByteSocket.accept();
+			new ServerHandler(connectionSocket, byteSocket).start();
 		}
 	}
 }
