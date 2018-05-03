@@ -11,7 +11,7 @@ class TCPServer {
 	@SuppressWarnings("resource")
 	public static void main(String argv[]) throws Exception {
 		
-		ServerSocket welcomeSocket = new ServerSocket(6789);
+		ServerSocket welcomeSocket = new ServerSocket(8888);
 		ServerSocket welcomeByteSocket = new ServerSocket(9999);
 		
 		while (true) {

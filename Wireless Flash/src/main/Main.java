@@ -13,8 +13,8 @@ public class Main extends Application {
 	
 	public static void main(String[] args) throws UnknownHostException {
 		
-		IP = "172.24.1.1";
-		//IP = "localhost";
+		//IP = "172.24.1.1";
+		IP = "localhost";
 		//IP = "192.168.43.76";
 		
 		MyFile[] listOfFiles = new BrowsingClient(IP).browserRequest("");

@@ -47,12 +47,14 @@ public class USBHandler{
 		}
 	}
 	
+
 	/**
 	 * method used to declare main requirements to upload files
-	 * @param outToClient is output stream for socket
+	 * @param outToClientStrings is output stream for sending strings
+	 * @param outToClientBytes is output stream for sending bytes
 	 * @param path is the path of the file/folder to be uploaded
 	 */
-	public static void uploadFile(BufferedReader fromClient, DataOutputStream outToClientStrings,
+	public static void uploadFile(DataOutputStream outToClientStrings,
 			DataOutputStream outToClientBytes, String path) {
 		File mainFile = new File(path);
 		String parent = mainFile.getParent();
@@ -64,7 +66,7 @@ public class USBHandler{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		fileTransfer.sendFiles(fromClient, outToClientStrings, outToClientBytes, mainFile, parent);
+		fileTransfer.sendFiles(outToClientStrings, outToClientBytes, mainFile, parent);
 	}
 	
 	/**
@@ -72,8 +74,7 @@ public class USBHandler{
 	 * @param fromClient is input strean
 	 * @param path is location to be saved with refrence to the USB
 	 */
-	public static void downloadFile(DataOutputStream toClient, DataInputStream bytesStream,
-			BufferedReader fromClient, String path) {
+	public static void downloadFile(DataInputStream bytesStream, BufferedReader fromClient, String path) {
 		if(path.compareTo("") == 0)
 			path = ROOT;
 		
@@ -84,11 +85,10 @@ public class USBHandler{
 			path = ROOT;
 		
 		try {
-			toClient.writeBytes("true\n");
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		
-		new FileTransfer().receiveFiles(toClient, bytesStream, fromClient, path);
+		new FileTransfer().receiveFiles(bytesStream, fromClient, path);
 	}
 }

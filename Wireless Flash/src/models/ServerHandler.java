@@ -46,7 +46,7 @@ public class ServerHandler implements Runnable{
 	                 new InputStreamReader(
 	 	                    connectionSocket.getInputStream(), StandardCharsets.UTF_8));
 		
-			DataInputStream is = new DataInputStream(byteSocket.getInputStream());
+			DataInputStream inputstreamBytes = new DataInputStream(byteSocket.getInputStream());
 		
 			DataOutputStream outToClientStrings = new DataOutputStream(connectionSocket.getOutputStream());
 			DataOutputStream outToClientBytes = new DataOutputStream(byteSocket.getOutputStream());
@@ -68,20 +68,20 @@ public class ServerHandler implements Runnable{
 		
 			if(clientRequest.compareTo(DOWNLOAD_REQUEST) == 0) {//download request
 				String path = inFromClient.readLine();
-				USBHandler.uploadFile(inFromClient, outToClientStrings, outToClientBytes, path);
+				USBHandler.uploadFile(outToClientStrings, outToClientBytes, path);
 			}
 			
 			if(clientRequest.compareTo(UPLOAD_REQUEST) == 0) {//upload request
 				String path = inFromClient.readLine();
-				USBHandler.downloadFile(outToClientStrings, is, inFromClient, path);
+				USBHandler.downloadFile(inputstreamBytes, inFromClient, path);
 			}
 		
 			if(clientRequest.compareTo(TEST_REQUEST) == 0) {
 				String path = inFromClient.readLine();
-				USBHandler.uploadFile(inFromClient, outToClientStrings, outToClientBytes, path);
+				USBHandler.uploadFile(outToClientStrings, outToClientBytes, path);
 			}
 			
-			is.close();
+			inputstreamBytes.close();
 			inFromClient.close();
 			outToClientStrings.close();
 			connectionSocket.close();

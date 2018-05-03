@@ -51,10 +51,12 @@ public class DownloadClient implements Runnable{
 	public void run() {
 		String request;
 		try {
-			Socket clientSocket = new Socket(IP, 6789);
-			Socket clientSocketBytes = new Socket(IP, 9999);
+			SocketBuilder socketBuilder = new SocketBuilder(this.IP);
 			
-			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+			Socket clientSocketStrings = socketBuilder.createStringSocket();
+			Socket clientSocketBytes = socketBuilder.createByteSocket();
+			
+			DataOutputStream outToServer = new DataOutputStream(clientSocketStrings.getOutputStream());
 			
 			request = "Download" + "\n" + path;
 			outToServer.write(request.getBytes("UTF-8"));
@@ -65,19 +67,21 @@ public class DownloadClient implements Runnable{
 
 			BufferedReader inFromServer = new BufferedReader(
 	                 new InputStreamReader(
-	 	                    clientSocket.getInputStream(), StandardCharsets.UTF_8));
+	                		 clientSocketStrings.getInputStream(), StandardCharsets.UTF_8));
 			
 			FileTransfer fileTransfer = new FileTransfer();
 			
 			long size = Long.parseLong(inFromServer.readLine());
 			
 			EstimationViewManagementThread manage = new EstimationViewManagementThread(
-					size, fileTransfer, clientSocket);
+					size, fileTransfer, clientSocketStrings, clientSocketBytes);
 			manage.start();
-			fileTransfer.receiveFiles(outToServer, bytesStream, inFromServer, locationToSave);
+			fileTransfer.receiveFiles(bytesStream, inFromServer, locationToSave);
+			
+			
 			clientSocketBytes.close();
-			outToServer.close();
-			clientSocket.close();
+			clientSocketStrings.close();
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

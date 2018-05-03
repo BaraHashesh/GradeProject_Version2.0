@@ -5,8 +5,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 
@@ -15,26 +15,22 @@ import java.io.FileOutputStream;
  */
 public class FileTransfer {
 	private long transferedFileSize = 0;
+	private File firstFile;
 	
 	private static final int BUFFERSIZE = 1024*32;
+
 	/**
 	 * method used to recursively upload files/folders
-	 * @param outToClient is output stream for socket
+	 * @param outputStreamStrings is output stream for strings
+	 * @param outputStreamBytes is output stream for bytes
 	 * @param file is the main file/folder to be uploaded 
 	 * @param mainPath is the parents path (to estaplish relationship of files)
 	 */
-	public void sendFiles(BufferedReader inputStream,DataOutputStream outputStreamStrings,
+	public void sendFiles(DataOutputStream outputStreamStrings,
 			DataOutputStream outputStreamBytes,
 			File file, String mainPath) {
 		
-		try {
-			
-			String temp = inputStream.readLine();
-			
-			boolean toSend = Boolean.parseBoolean(temp);
-			//check if client is willing to recieve file
-			if(!toSend)
-				return;
+		try {			
 			
 			MyFile myfile = new MyFile(file);
 
@@ -55,7 +51,7 @@ public class FileTransfer {
 			if(file.isDirectory()) {
 				File[] list = file.listFiles();
 				for(int i = 0; i < list.length; i++) 
-					sendFiles(inputStream, outputStreamStrings, outputStreamBytes, list[i], mainPath);
+					sendFiles(outputStreamStrings, outputStreamBytes, list[i], mainPath);
 			}else{
 				FileInputStream filedata = new FileInputStream(file);
 				byte[] buffer = new byte[BUFFERSIZE];
@@ -80,32 +76,46 @@ public class FileTransfer {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * method used to download files/folders
-	 * @param inputStream is input stream to receive data from 
+	 * @param byteStream is input stream to receive bytes from
+	 * @param inputStream is input stream to receive strings from
 	 * @param path is location to save data under
-	 * @throws FileNotFoundException 
 	 */
-	public void receiveFiles(DataOutputStream outputStreamStrings, DataInputStream byteStream,
-			BufferedReader inputStream, 
-			String path){
+	public void receiveFiles(DataInputStream byteStream, BufferedReader inputStream, String path){
+		FileOutputStream output = null;
 		try {
 			for(String temp; (temp = inputStream.readLine()) != null; ) {
 				MyFile myfile = JsonParser.singleJsonToMyFile(temp);
 
-				//myfile.decode();
 				if(myfile.isDirectory()) {
 					File file = new File(path+myfile.getPath());
+					
+					//check if file is the first to be received
+					if(firstFile == null)
+						firstFile = file;
+					
 					file.mkdirs();
 				}
 				else {
-					FileOutputStream output = new FileOutputStream(path+myfile.getPath());
+					
+					output = new FileOutputStream(path+myfile.getPath());
 					long size = Long.parseLong(myfile.getSize());
 					byte[] buffer = new byte[BUFFERSIZE];
 
+					//check if file is the first to be received
+					if(firstFile == null)
+						firstFile = new File(path+myfile.getPath());
+					
 					while(size > 0) {
-						int bytesRead = byteStream.read(buffer, 0, BUFFERSIZE/2);
-
+						int bytesRead = 0;
+						
+						if(size > BUFFERSIZE)
+							bytesRead = byteStream.read(buffer, 0, BUFFERSIZE);
+						else
+							bytesRead = byteStream.read(buffer, 0, (int)size);
+						
 						if (bytesRead != -1) {
 							this.transferedFileSize += bytesRead;
 							size -= bytesRead;
@@ -116,9 +126,10 @@ public class FileTransfer {
 					}
 					output.close();
 				}
-				outputStreamStrings.writeBytes("true\n");
 			}
-		}catch(Exception e) {
+		}catch(Exception e) {	
+			try {output.close();} catch (IOException e1) {}
+			deleteFile(firstFile);
 			e.printStackTrace();
 		}
 	}
@@ -152,5 +163,26 @@ public class FileTransfer {
 		return transferedFileSize;
 	}
 	
+	
+	/**
+	 * method used to delete a file
+	 * @param is the file to be deleted
+	 */
+	public static void deleteFile(File file) {
+		if(file == null || !file.exists())
+			return;
+		try {
+			if(file.isDirectory()) {
+				for(File sub : file.listFiles()) {
+					if(sub.isDirectory())
+						deleteFile(sub);
+					sub.delete();
+				}
+			}
+			file.delete();	
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 	
 }

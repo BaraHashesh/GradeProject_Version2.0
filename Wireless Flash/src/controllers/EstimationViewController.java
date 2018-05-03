@@ -12,7 +12,8 @@ import views.EstimationViewBuilder;
 public class EstimationViewController implements Runnable{
 	private EstimationViewBuilder estimationView;
 	private long fileSize;
-	private Socket socket;
+	private Socket socketStrings;
+	private Socket socketBytes;
 	private long fileSizeDone;
 	private long timePassed;
 	private boolean intialized = false;
@@ -21,10 +22,11 @@ public class EstimationViewController implements Runnable{
 	 * constructor for estimation view controller
 	 * @param stream is the output stream frim client to server
 	 */
-	public EstimationViewController(long fileSize, Socket sock) {
+	public EstimationViewController(long fileSize, Socket sockStrings, Socket sockBytes) {
 		this.fileSize = fileSize;
 		this.estimationView = new EstimationViewBuilder();
-		this.socket = sock;
+		this.socketStrings = sockStrings;
+		this.socketBytes = sockBytes;
 		Platform.runLater(this);
 	}
 	
@@ -36,7 +38,8 @@ public class EstimationViewController implements Runnable{
 		initialize();
 		this.estimationView.getEstimationStage().setOnCloseRequest(e -> {
 			try {
-				this.socket.close();
+				this.socketStrings.close();
+				this.socketBytes.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

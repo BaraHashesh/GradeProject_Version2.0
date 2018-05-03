@@ -38,18 +38,19 @@ public class BrowsingClient {
 		String request;
 		String response = "";
 		try {
-			Socket clientSocket = new Socket(IP, 6789);
-			@SuppressWarnings({ "unused", "resource" })
-			Socket clientSocketBytes = new Socket(IP, 9999);
+			SocketBuilder socketBuilder = new SocketBuilder(this.IP);
 			
-			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+			Socket clientSocketStrings = socketBuilder.createStringSocket();
+			Socket clientSocketBytes = socketBuilder.createByteSocket();
+			
+			DataOutputStream outToServer = new DataOutputStream(clientSocketStrings.getOutputStream());
 			
 			/*BufferedReader inFromServer = new BufferedReader(
 					new InputStreamReader(clientSocket.getInputStream()));*/
 			
 			BufferedReader inFromServer = new BufferedReader(
 	                 new InputStreamReader(
-	                    clientSocket.getInputStream(), StandardCharsets.UTF_8));
+	                		 clientSocketStrings.getInputStream(), StandardCharsets.UTF_8));
 			
 			request = "Browser" + "\n" + path;
 			outToServer.write(request.getBytes("UTF-8"));
@@ -61,7 +62,8 @@ public class BrowsingClient {
 			
 			outToServer.close();
 			inFromServer.close();
-			clientSocket.close();
+			clientSocketStrings.close();
+			clientSocketBytes.close();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

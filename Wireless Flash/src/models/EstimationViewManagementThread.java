@@ -11,8 +11,8 @@ public class EstimationViewManagementThread implements Runnable{
 	private FileTransfer fileTransfer;
 	private long totalSize;
 	
-	public EstimationViewManagementThread(long size, FileTransfer ft, Socket sock) {
-		est = new EstimationViewController(size, sock);
+	public EstimationViewManagementThread(long size, FileTransfer ft, Socket sockStrings, Socket sockBytes) {
+		est = new EstimationViewController(size, sockStrings, sockBytes);
 		this.totalSize = size;
 		this.fileTransfer = ft;
 	}
