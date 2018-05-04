@@ -6,18 +6,18 @@ import controllers.BrowserController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import models.BrowsingClient;
-import models.MyFile;
+import models.RowData;
 
 public class Main extends Application {
 	private static String IP;
 	
 	public static void main(String[] args) throws UnknownHostException {
 		
-		//IP = "172.24.1.1";
-		IP = "localhost";
+		IP = "172.24.1.1";
+		//IP = "localhost";
 		//IP = "192.168.43.76";
 		
-		MyFile[] listOfFiles = new BrowsingClient(IP).browserRequest("");
+		RowData[] listOfFiles = new BrowsingClient(IP).browserRequest("");
 	
 		if(listOfFiles==null)
 			return;

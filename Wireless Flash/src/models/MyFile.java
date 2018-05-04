@@ -5,14 +5,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.swing.filechooser.FileSystemView;
-
 import java.util.Base64;
 
 
 /**
  * MyFile object is used as a replacment for the File object
- * to interfaced with the TableView in javafx
+ * to exhange file informations over TCP
  */
 public class MyFile{
 	
@@ -20,9 +18,7 @@ public class MyFile{
 	private String name;
 	private String path;
 	private String parent;
-	private String type;
-	private String extension;
-	private String size;
+	private long size;
 	private Date lastModified;
 	private boolean directory;
 	
@@ -37,7 +33,6 @@ public class MyFile{
 		setSize(file);
 		setLastModified(file);
 		this.parent = file.getParent();
-		this.extension = extractExtension();
 	}
 
 	/**
@@ -87,18 +82,10 @@ public class MyFile{
 	}
 
 	/**
-	 * get method for file extention
-	 * @return file extention
-	 */
-	public String getType() {
-		return type;
-	}
-
-	/**
 	 * get method for file size
 	 * @return file size in bytes
 	 */
-	public String getSize() {
+	public long getSize() {
 		return size;
 	}
 
@@ -117,7 +104,7 @@ public class MyFile{
 	 */
 	public void setType(File file) {
 		this.directory = file.isDirectory();
-		this.type = FileSystemView.getFileSystemView().getSystemTypeDescription(file);
+		//this.type = FileSystemView.getFileSystemView().getSystemTypeDescription(file);
 		//this.type = Files.probeContentType(file.toPath());
 		//this.icon = FileSystemView.getFileSystemView().getSystemIcon(file);
 	}
@@ -169,10 +156,7 @@ public class MyFile{
 	 * @param file is the file to obtain size for
 	 */
 	private void setSize(File file) {
-		if(!file.isDirectory())
-			this.size = file.length()+"";
-		else
-			this.size = "";
+		this.size = file.length();
 	}
 
 	/**
@@ -212,19 +196,12 @@ public class MyFile{
 		return this.parent.substring(0, i+1);
 	}
 	
-	/**
-	 * get method for the files extention
-	 * @return extension for the file (EXE, PDF, ...) 
-	 */
-	public String getExtension() {
-		return extension;
-	}
 
 	
 	@Override
 	public String toString() {
-		return "MyFile [name=" + name + ", path=" + path + ", parent=" + parent + ", type=" + type + ", extension="
-				+ extension + ", size=" + size + ", lastModified=" + lastModified + ", directory=" + directory + "]";
+		return "MyFile [name=" + name + ", path=" + path + ", parent=" + parent + 
+				", size=" + size + ", lastModified=" + lastModified + ", directory=" + directory + "]";
 	}
 
 	
@@ -244,11 +221,7 @@ public class MyFile{
 		this.parent = parent;
 	}
 
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public void setSize(String size) {
+	public void setSize(long size) {
 		this.size = size;
 	}
 
@@ -258,10 +231,6 @@ public class MyFile{
 
 	public void setDirectory(boolean directory) {
 		this.directory = directory;
-	}
-
-	public void setExtension(String extension) {
-		this.extension = extension;
 	}
 	
 	

@@ -34,7 +34,7 @@ public class BrowsingClient {
 	 * @param path is the path to the directory with in the USB
 	 * @return information about the files in the directory if it exists
 	 */
-	public MyFile[] browserRequest(String path) {
+	public RowData[] browserRequest(String path) {
 		String request;
 		String response = "";
 		try {

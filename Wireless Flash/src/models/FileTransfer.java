@@ -102,7 +102,7 @@ public class FileTransfer {
 				else {
 					
 					output = new FileOutputStream(path+myfile.getPath());
-					long size = Long.parseLong(myfile.getSize());
+					long size = myfile.getSize();
 					byte[] buffer = new byte[BUFFERSIZE];
 
 					//check if file is the first to be received

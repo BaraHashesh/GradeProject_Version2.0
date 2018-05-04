@@ -3,10 +3,7 @@ package controllers;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
 import java.util.ResourceBundle;
-
-import javax.swing.Icon;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,17 +18,18 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import models.BrowsingClient;
 import models.DownloadClient;
-import models.MyFile;
+import models.RowData;
 import models.UploadClient;
 
 public class BrowserController implements Initializable{
 	private static String IP ;
 	private static Scene bowserScene;
-	private static ObservableList<MyFile> list;
+	private static ObservableList<RowData> list;
 	private static String parentDirectory = "";
 	private static BrowsingClient browsingClient = null;
 	
@@ -42,7 +40,7 @@ public class BrowserController implements Initializable{
 	private Button back, download, remove, uploadFile, uploadFolder, test;
 	
 	@FXML
-	private TableView<MyFile> fileTable;
+	private TableView<RowData> fileTable;
 	
 	/**
 	 * method used to convert FXML file to a javafx scene 
@@ -65,7 +63,7 @@ public class BrowserController implements Initializable{
 	 * set the observable list connected to the Table
 	 * @param listTODisplay list of objects to display
 	 */
-	public static void setList(MyFile[] listTODisplay) {
+	public static void setList(RowData[] listTODisplay) {
 		list = FXCollections.observableArrayList(listTODisplay);
 	}
 	
@@ -77,25 +75,28 @@ public class BrowserController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		browsingClient = new BrowsingClient(IP);
 		
-		TableColumn<MyFile, String> name = new TableColumn<>("name");
-    	TableColumn<MyFile, Icon> type = new TableColumn<>("type");
-    	TableColumn<MyFile, String> extension = new TableColumn<>("extension");
-    	TableColumn<MyFile, Date> date = new TableColumn<>("Last Modified");
-    	TableColumn<MyFile, Long> size = new TableColumn<>("size(Bytes)");
+		TableColumn<RowData, Image> image = new TableColumn<>("");
+		TableColumn<RowData, String> name = new TableColumn<>("name");
+    	TableColumn<RowData, String> type = new TableColumn<>("type");
+    	//TableColumn<MyFile, String> extension = new TableColumn<>("extension");
+    	TableColumn<RowData, String> date = new TableColumn<>("Last Modified");
+    	TableColumn<RowData, String> size = new TableColumn<>("size");
     	
-    	name.setCellValueFactory(new PropertyValueFactory<MyFile, String>("name"));
-    	type.setCellValueFactory(new PropertyValueFactory<MyFile, Icon>("type"));
-    	extension.setCellValueFactory(new PropertyValueFactory<MyFile, String>("extension"));
-    	date.setCellValueFactory(new PropertyValueFactory<MyFile, Date>("lastModified"));
-    	size.setCellValueFactory(new PropertyValueFactory<MyFile, Long>("size"));
+    	
+    	image.setCellValueFactory(new PropertyValueFactory<RowData, Image>("icon"));
+    	name.setCellValueFactory(new PropertyValueFactory<RowData, String>("name"));
+    	type.setCellValueFactory(new PropertyValueFactory<RowData, String>("type"));
+    	//extension.setCellValueFactory(new PropertyValueFactory<MyFile, String>("extension"));
+    	date.setCellValueFactory(new PropertyValueFactory<RowData, String>("modifiedDate"));
+    	size.setCellValueFactory(new PropertyValueFactory<RowData, String>("sizeBytes"));
 		
 		fileTable.getColumns().clear();
-		fileTable.getColumns().addAll(name, type, extension, date, size);
+		fileTable.getColumns().addAll(image, name, type, date, size);
 
 		fileTable.setItems(list);
 		
 		fileTable.setRowFactory( tv -> {
-		    TableRow<MyFile> row = new TableRow<>();
+		    TableRow<RowData> row = new TableRow<>();
 		    row.setOnMouseClicked(event -> {
 		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 					nextDirectory();
@@ -109,7 +110,7 @@ public class BrowserController implements Initializable{
 	 * Action that is used to move downward in the USB file tree
 	 */
 	public void nextDirectory(){
-		MyFile file = fileTable.getSelectionModel().getSelectedItem();
+		RowData file = fileTable.getSelectionModel().getSelectedItem();
 		if(file.isDirectory()) {
 			String newPath = file.getPath();
 			parentDirectory = file.getParent();
@@ -149,7 +150,7 @@ public class BrowserController implements Initializable{
 	 * method used to delete files
 	 */
 	public void delete() {
-		MyFile file = fileTable.getSelectionModel().getSelectedItem();
+		RowData file = fileTable.getSelectionModel().getSelectedItem();
 		browsingClient.deleteRequest(file.getPath());
 		list.remove(file);
 		fileTable.setItems(list);
@@ -163,7 +164,7 @@ public class BrowserController implements Initializable{
 		chooser.setTitle("Place to Save");
 		File defaultDirectory = new File("D:/");
 		chooser.setInitialDirectory(defaultDirectory);
-        MyFile file = fileTable.getSelectionModel().getSelectedItem();
+		RowData file = fileTable.getSelectionModel().getSelectedItem();
         File directoryChoosen = chooser.showDialog(null);
         if(directoryChoosen != null)
         	new DownloadClient(IP).start(file.getPath(), directoryChoosen.getAbsolutePath()+"\\");

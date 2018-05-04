@@ -31,10 +31,10 @@ public class JsonParser {
 	 * @param json is json string containing MyFile objects
 	 * @return list of MyFile Objects
 	 */
-	public static MyFile[] JsonToMyFile(String json){
+	public static RowData[] JsonToMyFile(String json){
 		try {
 			ObjectMapper om = new ObjectMapper();
-			MyFile[] list = om.readValue(json, MyFile[].class);
+			RowData[] list = om.readValue(json, RowData[].class);
 			/*for(int i = 0; i < list.length; i++)
 				list[i].decode();*/
 			return list;
