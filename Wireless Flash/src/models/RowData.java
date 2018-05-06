@@ -45,6 +45,7 @@ public class RowData extends MyFile{
 		}
 	}
 	
+	
 	/**
 	 * method used to create Icons to display for files
 	 * @return the icon of the file
@@ -52,23 +53,26 @@ public class RowData extends MyFile{
 	public ImageView getIcon() {
 		try {
 			if(isDirectory()) {
+				ImageView icon;
+				
 				File file = new File("dump");
 				file.mkdir();
-				
 
 				ImageIcon swingImageIcon = (ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(file);
 				java.awt.Image awtImage = swingImageIcon.getImage();
-				ImageView icon = new ImageView(SwingFXUtils.toFXImage((BufferedImage) awtImage, null));
+				icon = new ImageView(SwingFXUtils.toFXImage((BufferedImage) awtImage, null));
 				
 				file.delete();
 				
-				return icon;
+				return new ImageView(icon.getImage());
 				
 			}
 			
 			String extension = extractExtension();
 			
 			if(extension.compareTo("") == 0) {
+				ImageView icon;
+				
 				File file = new File("dump");
 				PrintWriter printWriter = new PrintWriter(file);
 				printWriter.print("");
@@ -76,12 +80,14 @@ public class RowData extends MyFile{
 				
 				ImageIcon swingImageIcon = (ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(file);
 				java.awt.Image awtImage = swingImageIcon.getImage();
-				ImageView icon = new ImageView(SwingFXUtils.toFXImage((BufferedImage) awtImage, null));
+				icon = new ImageView(SwingFXUtils.toFXImage((BufferedImage) awtImage, null));
 				
 				file.delete();
 				
 				return icon;
 			}
+			
+			ImageView icon;
 			
 			File file = new File("dump."+extension);
 			PrintWriter printWriter = new PrintWriter(file);
@@ -90,7 +96,7 @@ public class RowData extends MyFile{
 			
 			ImageIcon swingImageIcon = (ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(file);
 			java.awt.Image awtImage = swingImageIcon.getImage();
-			ImageView icon = new ImageView(SwingFXUtils.toFXImage((BufferedImage) awtImage, null));
+			icon = new ImageView(SwingFXUtils.toFXImage((BufferedImage) awtImage, null));
 			
 			file.delete();
 			
@@ -107,7 +113,6 @@ public class RowData extends MyFile{
 	 * @return the system type of the file
 	 */
 	public String getType() {
-		
 		if(isDirectory())
 			return "File Folder";
 		

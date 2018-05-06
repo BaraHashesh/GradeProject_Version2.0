@@ -17,7 +17,7 @@ public class FileTransfer {
 	private long transferedFileSize = 0;
 	private File firstFile;
 	
-	private static final int BUFFERSIZE = 1024*32;
+	private static final int BUFFERSIZE = 1024 * 64;
 
 	/**
 	 * method used to recursively upload files/folders
@@ -49,6 +49,8 @@ public class FileTransfer {
 			
 			outputStreamStrings.writeBytes("\n");
 			
+			outputStreamStrings.flush();
+			
 			if(file.isDirectory()) {
 				File[] list = file.listFiles();
 				for(int i = 0; i < list.length; i++) 
@@ -70,6 +72,7 @@ public class FileTransfer {
 						this.transferedFileSize += size;
 						size = 0;
 					}
+					outputStreamBytes.flush();
 				}
 				filedata.close();
 			}
