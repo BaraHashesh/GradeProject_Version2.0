@@ -4,7 +4,6 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import java.util.Base64;
 
 
@@ -200,8 +199,7 @@ public class MyFile{
 	
 	@Override
 	public String toString() {
-		return "MyFile [name=" + name + ", path=" + path + ", parent=" + parent + 
-				", size=" + size + ", lastModified=" + lastModified + ", directory=" + directory + "]";
+		return "MyFile [name=" + name + "]";
 	}
 
 	

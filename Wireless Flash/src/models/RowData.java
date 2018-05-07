@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileSystemView;
@@ -17,6 +18,7 @@ import javafx.scene.image.ImageView;
  * to interfaced with the TableView in javafx
  */
 public class RowData extends MyFile{
+	private static final String FILE_NAME = UUID.randomUUID().toString().replace("-", "_");
 	
 	/**
 	 * method used to get the size of the file 
@@ -50,12 +52,14 @@ public class RowData extends MyFile{
 	 * method used to create Icons to display for files
 	 * @return the icon of the file
 	 */
+	@SuppressWarnings("static-access")
 	public ImageView getIcon() {
 		try {
+			
 			if(isDirectory()) {
 				ImageView icon;
-				
-				File file = new File("dump");
+
+				File file = new File(this.FILE_NAME);
 				file.mkdir();
 
 				ImageIcon swingImageIcon = (ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(file);
@@ -64,7 +68,7 @@ public class RowData extends MyFile{
 				
 				file.delete();
 				
-				return new ImageView(icon.getImage());
+				return icon;
 				
 			}
 			
@@ -73,7 +77,7 @@ public class RowData extends MyFile{
 			if(extension.compareTo("") == 0) {
 				ImageView icon;
 				
-				File file = new File("dump");
+				File file = new File(this.FILE_NAME);
 				PrintWriter printWriter = new PrintWriter(file);
 				printWriter.print("");
 				printWriter.close();
@@ -89,7 +93,7 @@ public class RowData extends MyFile{
 			
 			ImageView icon;
 			
-			File file = new File("dump."+extension);
+			File file = new File(this.FILE_NAME+"."+extension);
 			PrintWriter printWriter = new PrintWriter(file);
 			printWriter.print("");
 			printWriter.close();
@@ -121,7 +125,8 @@ public class RowData extends MyFile{
 		
 		else {
 			try {
-				File file = new File("dump."+extractExtension());
+				@SuppressWarnings("static-access")
+				File file = new File(this.FILE_NAME+"."+extractExtension());
 				PrintWriter printWriter = new PrintWriter(file);
 				printWriter.print("");
 				printWriter.close();
