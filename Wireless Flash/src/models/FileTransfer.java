@@ -16,8 +16,9 @@ import java.io.IOException;
 public class FileTransfer {
 	private long transferedFileSize = 0;
 	private File firstFile;
+	private boolean work=true;
 	
-	private static final int BUFFERSIZE = 1024 * 64;
+	private static final int BUFFERSIZE = 1024 * 1024 * 4;
 
 	/**
 	 * method used to recursively upload files/folders
@@ -30,7 +31,10 @@ public class FileTransfer {
 			DataOutputStream outputStreamBytes,
 			File file, String mainPath) {
 		
-		try {			
+		try {		
+			//check if pipe was broken
+			if(!work)
+				return;
 			
 			MyFile myfile = new MyFile(file);
 
@@ -53,7 +57,7 @@ public class FileTransfer {
 			
 			if(file.isDirectory()) {
 				File[] list = file.listFiles();
-				for(int i = 0; i < list.length; i++) 
+				for(int i = 0; i < list.length; i++)
 					sendFiles(outputStreamStrings, outputStreamBytes, list[i], mainPath);
 			}else{
 				FileInputStream filedata = new FileInputStream(file);
@@ -77,6 +81,7 @@ public class FileTransfer {
 				filedata.close();
 			}
 		}catch(Exception e) {
+			work = false; //pipe was broken
 			e.printStackTrace();
 		}
 	}

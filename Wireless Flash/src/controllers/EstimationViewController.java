@@ -16,6 +16,8 @@ public class EstimationViewController implements Runnable{
 	private Socket socketBytes;
 	private long fileSizeDone;
 	private long timePassed;
+	private long timeRemaining;
+	private double transferSpeed;
 	private boolean intialized = false;
 	
 	/**
@@ -99,9 +101,11 @@ public class EstimationViewController implements Runnable{
 	 * @param dataDone is the size of data that has been transfered/received so far
 	 * @param time is the amount of time that has passed
 	 */
-	public void update(long dataDone, long time) {
+	public void update(long dataDone, long time, double speed) {
+		this.transferSpeed = speed;
 		this.fileSizeDone = dataDone;
-		this.timePassed = (long) (((double)(this.fileSize - this.fileSizeDone)) / 
+		this.timePassed = time;
+		this.timeRemaining = (long) (((double)(this.fileSize - this.fileSizeDone)) / 
 				((double)this.fileSizeDone/(double)time));
 		Platform.runLater(this);
 	}
@@ -113,6 +117,10 @@ public class EstimationViewController implements Runnable{
 			this.intialized = true;
 		}
 		else {
+			//close file transfer view if done
+			if(this.fileSizeDone == this.fileSize)
+				estimationView.getEstimationStage().close();
+			
 			double dataToDisplay = this.fileSizeDone;
 			String dataInfo = "Bytes";
 			
@@ -128,13 +136,15 @@ public class EstimationViewController implements Runnable{
 			
 			String info = round(dataToDisplay, 2) + dataInfo +" have been transfered/recieved - ";
 			
-			long hours = this.timePassed / 360;
-			this.timePassed  = this.timePassed %360;
-			int minutes = (int) (this.timePassed / 60);
-			this.timePassed = this.timePassed %60;
+			long hours = this.timeRemaining / 360;
+			this.timeRemaining  = this.timeRemaining %360;
+			int minutes = (int) (this.timeRemaining / 60);
+			this.timeRemaining = this.timeRemaining %60;
 			
-			info = info + "aproximatly " + hours + " hours and " + minutes + " minutes and " + this.timePassed
+			info = info + "aproximatly " + hours + " hours and " + minutes + " minutes and " + this.timeRemaining
 					+ " seconds are remaining to finish work";
+			
+			info = info + " ( " + round(this.transferSpeed/(double)this.timePassed, 2) + " MB/s )";
 			
 			this.estimationView.getInformationLabel().setText(info);
 			

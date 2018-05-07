@@ -23,9 +23,10 @@ public class EstimationViewManagementThread implements Runnable{
 	}
 	@Override
 	public void run() {
+
 		while(this.totalSize > fileTransfer.getTransferedFileSize()) {
 			if(!started) {
-				est.update(0, 0);
+				est.update(0, 0, 0);
 				started = true;
 				time++;
 				try {
@@ -36,7 +37,9 @@ public class EstimationViewManagementThread implements Runnable{
 				}
 			}
 			else {
-				est.update(fileTransfer.getTransferedFileSize(), this.time);
+				est.update(fileTransfer.getTransferedFileSize(), this.time, 
+						(double)fileTransfer.getTransferedFileSize()/1024.0/1024.0);
+				
 				time++;
 				try {
 					Thread.sleep(1000);
@@ -46,6 +49,6 @@ public class EstimationViewManagementThread implements Runnable{
 				}
 			}
 		}
-		est.update(this.totalSize, this.time);	
+		est.update(this.totalSize, this.time, (double)this.totalSize/1024.0/1024.0);	
 	}
 }
