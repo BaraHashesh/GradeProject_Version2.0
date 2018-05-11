@@ -105,7 +105,7 @@ public class RowData extends MyFile{
 				String type = FileSystemView.getFileSystemView().getSystemTypeDescription(file);
 				
 				file.delete();
-				
+			
 				return type;
 			}
 			catch(Exception e) {
