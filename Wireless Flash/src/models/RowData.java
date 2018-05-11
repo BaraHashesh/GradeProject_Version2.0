@@ -64,7 +64,6 @@ public class RowData extends MyFile{
 			if (extension.compareTo("") == 0) {
 				return new ImageView(new Image(getClass().getResource("../images/file.png").openStream()));
 			}
-
 			
 			File file = File.createTempFile(this.FILE_NAME, "." + extension);
 			

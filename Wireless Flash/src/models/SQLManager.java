@@ -55,11 +55,6 @@ public class SQLManager {
 		return connection;
 	}
 
-	/**
-	 * 
-	 * @param extension
-	 * @param type
-	 */
 	public void insertType(String extension, String type) {
 		try {
 			Statement statement = this.connection.createStatement();
@@ -74,11 +69,6 @@ public class SQLManager {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param extension
-	 * @return
-	 */
 	public String getType(String extension) {
 		try {
 			Statement statement = this.connection.createStatement();
