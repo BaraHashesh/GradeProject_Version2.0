@@ -1,22 +1,25 @@
 package models;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.sql.*;
+import java.util.Arrays;
 
-import javax.sql.rowset.serial.SerialBlob;
+import javax.imageio.ImageIO;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelFormat;
 
 
 public class SQLManager {
 	private static SQLManager sqlManager;
 	private static final String DATA_BASE_NAME = "file.db";
-	private static final String TABLE_ICON = "FileIcon";
-	private static final String TABLE_TYPE = "FileType";
-	private static final String FILE_EXE = "Extension";
-	private static final String FILE_TYPE = "Type";
-	private static final String FILE_ICON = "Icon";
+	private static final String TABLE_ICON = "fileicon";
+	private static final String TABLE_TYPE = "filetype";
+	private static final String FILE_EXE = "extension";
+	private static final String FILE_TYPE = "type";
+	private static final String FILE_ICON = "icon";
 	
 	private Connection connection;
 
@@ -81,22 +84,20 @@ public class SQLManager {
 	 */
 	public void insertIcon(String extension, Image image) {
 		try {
-			int w = (int)image.getWidth();
-			int h = (int)image.getHeight();
-	
-			byte[] buf = new byte[w * h * 4];
-	
-			image.getPixelReader().getPixels(0, 0, w, h, PixelFormat.getByteBgraInstance(), buf, 0, w * 4);
+			BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+			ByteArrayOutputStream s = new ByteArrayOutputStream();
+			ImageIO.write(bImage, "png", s);
+			byte[] res  = s.toByteArray();
 			
 			Statement statement = this.connection.createStatement();
-	        System.out.println(extension);
-	        String sql = "INSERT INTO " + TABLE_ICON + "( " + FILE_EXE +", " + FILE_ICON + ")" +
-	        		" VALUES (" + extension +", " + new SerialBlob(buf) + ")"; 
+
+	        String sql = "INSERT INTO " + TABLE_ICON + " VALUES ('" + extension 
+	        		+"', '" + Arrays.toString(res) + "')"; 
 	        
 	        statement.execute(sql);
 	        
 		}catch (Exception e) {
-			System.out.println("Insert " + e.toString());
+			e.printStackTrace();
 		}
 	}
 	
@@ -111,26 +112,26 @@ public class SQLManager {
 
 			Statement statement = this.connection.createStatement();
 	        
-	        String sql = "SELECT * FROM " + TABLE_ICON +
-	        				" WHERE " + FILE_EXE + " = " + extension; 
+	        String sql = "SELECT " + FILE_ICON + " FROM " + TABLE_ICON +
+	        				" WHERE " + FILE_EXE + " = '" + extension + "'"; 
 	        
 	        ResultSet resultSet = statement.executeQuery(sql);
 	        
-	        Blob blob = resultSet.getBlob(FILE_ICON);
-	        
-	        byte[] buffer = blob.getBytes(1, (int) blob.length());
-	        
-	        ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
-	        
-	        return new Image(inputStream);
+	        if (resultSet.next()) {
+	     		        
+		        byte[] buffer = resultSet.getBytes(FILE_ICON);
+		        
+		        System.out.println(Arrays.toString(buffer));
+		        
+		        ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
+		        
+		        return new Image(inputStream);
+	        }
 
 		}catch (Exception e) {
-			System.out.println("GET " + e.toString());
+			e.printStackTrace();
 		}
 		
 		return null;
-	}
-	
-	
-	
+	}	
 }

@@ -64,20 +64,12 @@ public class RowData extends MyFile{
 			if (extension.compareTo("") == 0) {
 				return new ImageView(new Image(getClass().getResource("../images/file.png").openStream()));
 			}
-			
-			Image image = SQLManager.getSqlManager().getIcon(extension);
-			
-			if(image != null) {
-				return new ImageView(image);
-			}
 
 			File file = File.createTempFile(this.FILE_NAME, "." + extension);
 			
 			ImageIcon swingImageIcon = (ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(file);
 			java.awt.Image awtImage = swingImageIcon.getImage();
-			image = SwingFXUtils.toFXImage((BufferedImage) awtImage, null);
-			
-			SQLManager.getSqlManager().insertIcon(extension, image);
+			Image image = SwingFXUtils.toFXImage((BufferedImage) awtImage, null);
 			
 			file.delete();
 
@@ -85,6 +77,11 @@ public class RowData extends MyFile{
 		}
 		catch(Exception e) {
 			e.printStackTrace();
+		}
+		
+		try {
+			return new ImageView(new Image(getClass().getResource("../images/file.png").openStream()));
+		}catch(Exception e) {
 			return null;
 		}
 	}
