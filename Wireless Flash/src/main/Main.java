@@ -16,7 +16,7 @@ public class Main extends Application {
 		//IP = "172.24.1.66";
 		//IP = "172.24.1.1";
 		IP = "localhost";
-		//IP = "192.168.43.76";
+		//IP = "192.168.43.134";
 		
 		RowData[] listOfFiles = new BrowsingClient(IP).browserRequest("");
 		

@@ -5,12 +5,12 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.UUID;
 
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileSystemView;
 
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
@@ -18,7 +18,8 @@ import javafx.scene.image.ImageView;
  * to interfaced with the TableView in javafx
  */
 public class RowData extends MyFile{
-	private static final String FILE_NAME = UUID.randomUUID().toString().replace("-", "_");
+	private static final String FILE_NAME = "b626052a_d7bf_41b1_b365_3c653a2936a8";
+	private static final String FOLDER_NAME = "0507f5e5_70f7_468b_b5ce_62aead98d84b";
 	
 	/**
 	 * method used to get the size of the file 
@@ -57,53 +58,25 @@ public class RowData extends MyFile{
 		try {
 			
 			if(isDirectory()) {
-				ImageView icon;
-
-				File file = new File(this.FILE_NAME);
-				file.mkdir();
-
-				ImageIcon swingImageIcon = (ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(file);
-				java.awt.Image awtImage = swingImageIcon.getImage();
-				icon = new ImageView(SwingFXUtils.toFXImage((BufferedImage) awtImage, null));
-				
-				file.delete();
-				
-				return icon;
-				
+				return new ImageView(new Image(getClass().getResource("../images/folder.png").openStream()));
 			}
 			
 			String extension = extractExtension();
 			
-			if(extension.compareTo("") == 0) {
-				ImageView icon;
-				
-				File file = new File(this.FILE_NAME);
-				PrintWriter printWriter = new PrintWriter(file);
-				printWriter.print("");
-				printWriter.close();
-				
-				ImageIcon swingImageIcon = (ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(file);
-				java.awt.Image awtImage = swingImageIcon.getImage();
-				icon = new ImageView(SwingFXUtils.toFXImage((BufferedImage) awtImage, null));
-				
-				file.delete();
-				
-				return icon;
+			if(extension.compareTo("") != 0) {
+				extension = "."+extension;
 			}
 			
 			ImageView icon;
-			
-			File file = new File(this.FILE_NAME+"."+extension);
-			PrintWriter printWriter = new PrintWriter(file);
-			printWriter.print("");
-			printWriter.close();
+
+			File file = File.createTempFile(this.FILE_NAME, extension);
 			
 			ImageIcon swingImageIcon = (ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(file);
 			java.awt.Image awtImage = swingImageIcon.getImage();
 			icon = new ImageView(SwingFXUtils.toFXImage((BufferedImage) awtImage, null));
 			
 			file.delete();
-			
+
 			return icon;
 		}
 		catch(Exception e) {
@@ -126,10 +99,7 @@ public class RowData extends MyFile{
 		else {
 			try {
 				@SuppressWarnings("static-access")
-				File file = new File(this.FILE_NAME+"."+extractExtension());
-				PrintWriter printWriter = new PrintWriter(file);
-				printWriter.print("");
-				printWriter.close();
+				File file = File.createTempFile(this.FILE_NAME, "."+extractExtension());
 				
 				String type = FileSystemView.getFileSystemView().getSystemTypeDescription(file);
 				

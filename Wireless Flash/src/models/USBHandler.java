@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class USBHandler{	
 	
-	public static final String ROOT = "H:\\";
+	public static final String ROOT = "D:\\";
 	/**
 	 * Method used to get the file list in a folder in the USB
 	 * @param folderURL Path to folder (given root is an empty string i.e. "")
