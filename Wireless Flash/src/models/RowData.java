@@ -65,6 +65,7 @@ public class RowData extends MyFile{
 				return new ImageView(new Image(getClass().getResource("../images/file.png").openStream()));
 			}
 
+			
 			File file = File.createTempFile(this.FILE_NAME, "." + extension);
 			
 			ImageIcon swingImageIcon = (ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(file);
