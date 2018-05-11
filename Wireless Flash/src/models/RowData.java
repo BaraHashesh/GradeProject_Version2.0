@@ -2,7 +2,6 @@ package models;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -19,7 +18,6 @@ import javafx.scene.image.ImageView;
  */
 public class RowData extends MyFile{
 	private static final String FILE_NAME = "b626052a_d7bf_41b1_b365_3c653a2936a8";
-	private static final String FOLDER_NAME = "0507f5e5_70f7_468b_b5ce_62aead98d84b";
 	
 	/**
 	 * method used to get the size of the file 
@@ -63,21 +61,27 @@ public class RowData extends MyFile{
 			
 			String extension = extractExtension();
 			
-			if(extension.compareTo("") != 0) {
-				extension = "."+extension;
+			if (extension.compareTo("") == 0) {
+				return new ImageView(new Image(getClass().getResource("../images/file.png").openStream()));
 			}
 			
-			ImageView icon;
+			Image image = SQLManager.getSqlManager().getIcon(extension);
+			
+			if(image != null) {
+				return new ImageView(image);
+			}
 
-			File file = File.createTempFile(this.FILE_NAME, extension);
+			File file = File.createTempFile(this.FILE_NAME, "." + extension);
 			
 			ImageIcon swingImageIcon = (ImageIcon) FileSystemView.getFileSystemView().getSystemIcon(file);
 			java.awt.Image awtImage = swingImageIcon.getImage();
-			icon = new ImageView(SwingFXUtils.toFXImage((BufferedImage) awtImage, null));
+			image = SwingFXUtils.toFXImage((BufferedImage) awtImage, null);
+			
+			SQLManager.getSqlManager().insertIcon(extension, image);
 			
 			file.delete();
 
-			return icon;
+			return new ImageView(image);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -109,7 +113,7 @@ public class RowData extends MyFile{
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-				return "";
+				return "File";
 			}
 		}
 	}

@@ -1,12 +1,11 @@
 package main;
 
-import java.util.UUID;
+import models.SQLManager;
 
 public class Test{
    
-   public static void main(String[] args) {
-	   System.out.println(UUID.randomUUID().toString().replace("-", "_"));
-	   System.out.println(UUID.randomUUID().toString().replace("-", "_"));
+   public static void main(String[] args) {	      
+	   SQLManager.getSqlManager();
    }
 
 }
