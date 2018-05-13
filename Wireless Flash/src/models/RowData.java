@@ -74,11 +74,12 @@ public class RowData extends MyFile{
 			file.delete();
 
 			return new ImageView(image);
+			
+			//return new ImageView(new Image(getClass().getResource("../images/" + extension +".png").openStream()));
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-		
 		try {
 			return new ImageView(new Image(getClass().getResource("../images/file.png").openStream()));
 		}catch(Exception e) {
