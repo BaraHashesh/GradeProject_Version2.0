@@ -7,7 +7,7 @@ import models.ServerHandler;
 /**
  * Class used to create a simple server on the device
  */
-class TCPServer {	
+public class TCPServer {	
 	@SuppressWarnings("resource")
 	public static void main(String argv[]) throws Exception {
 		

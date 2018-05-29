@@ -50,7 +50,7 @@ public class BrowserController implements Initializable{
 		if(bowserScene != null)
 			return bowserScene;
 		try {
-			Parent p = (Parent) FXMLLoader.load(getClass().getResource("../views/BrowserView.fxml"));
+			Parent p = (Parent) FXMLLoader.load(getClass().getResource("/views/BrowserView.fxml"));
 			bowserScene = new Scene(p);
 			return bowserScene;
 		} catch (IOException e) {
@@ -78,7 +78,6 @@ public class BrowserController implements Initializable{
 		TableColumn<RowData, Image> image = new TableColumn<>("");
 		TableColumn<RowData, String> name = new TableColumn<>("name");
     	TableColumn<RowData, String> type = new TableColumn<>("type");
-    	//TableColumn<MyFile, String> extension = new TableColumn<>("extension");
     	TableColumn<RowData, String> date = new TableColumn<>("Last Modified");
     	TableColumn<RowData, String> size = new TableColumn<>("size");
     	
@@ -86,7 +85,6 @@ public class BrowserController implements Initializable{
     	image.setCellValueFactory(new PropertyValueFactory<RowData, Image>("icon"));
     	name.setCellValueFactory(new PropertyValueFactory<RowData, String>("name"));
     	type.setCellValueFactory(new PropertyValueFactory<RowData, String>("type"));
-    	//extension.setCellValueFactory(new PropertyValueFactory<MyFile, String>("extension"));
     	date.setCellValueFactory(new PropertyValueFactory<RowData, String>("modifiedDate"));
     	size.setCellValueFactory(new PropertyValueFactory<RowData, String>("sizeBytes"));
 		
@@ -162,7 +160,7 @@ public class BrowserController implements Initializable{
 	public void download() {
 		DirectoryChooser chooser = new DirectoryChooser();
 		chooser.setTitle("Place to Save");
-		File defaultDirectory = new File("D:/");
+		File defaultDirectory = new File(".");
 		chooser.setInitialDirectory(defaultDirectory);
 		RowData file = fileTable.getSelectionModel().getSelectedItem();
         File directoryChoosen = chooser.showDialog(null);
@@ -176,7 +174,7 @@ public class BrowserController implements Initializable{
 	public void uploadFile() {
 		FileChooser chooser = new FileChooser();
 		chooser.setTitle("File to Upload");
-		File defaultDirectory = new File("D:/");
+		File defaultDirectory = new File(".");
 		chooser.setInitialDirectory(defaultDirectory);
         File FileChoosen = chooser.showOpenDialog(null);
         if(FileChoosen != null)
@@ -189,7 +187,7 @@ public class BrowserController implements Initializable{
 	public void uploadFolder() {
 		DirectoryChooser chooser = new DirectoryChooser();
 		chooser.setTitle("Folder to Upload");
-		File defaultDirectory = new File("D:/");
+		File defaultDirectory = new File(".");
 		chooser.setInitialDirectory(defaultDirectory);
         File directoryChoosen = chooser.showDialog(null);
         if(directoryChoosen != null)

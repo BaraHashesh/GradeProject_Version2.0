@@ -56,13 +56,13 @@ public class RowData extends MyFile{
 		try {
 			
 			if(isDirectory()) {
-				return new ImageView(new Image(getClass().getResource("../images/folder.png").openStream()));
+				return new ImageView(new Image(getClass().getResource("/images/folder.png").openStream()));
 			}
 			
 			String extension = extractExtension();
 			
 			if (extension.compareTo("") == 0) {
-				return new ImageView(new Image(getClass().getResource("../images/file.png").openStream()));
+				return new ImageView(new Image(getClass().getResource("/images/file.png").openStream()));
 			}
 			
 			File file = File.createTempFile(this.FILE_NAME, "." + extension);
@@ -75,13 +75,13 @@ public class RowData extends MyFile{
 
 			return new ImageView(image);
 			
-			//return new ImageView(new Image(getClass().getResource("../images/" + extension +".png").openStream()));
+			//return new ImageView(new Image(getClass().getResource("/images/" + extension +".png").openStream()));
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
 		try {
-			return new ImageView(new Image(getClass().getResource("../images/file.png").openStream()));
+			return new ImageView(new Image(getClass().getResource("/images/file.png").openStream()));
 		}catch(Exception e) {
 			return null;
 		}
