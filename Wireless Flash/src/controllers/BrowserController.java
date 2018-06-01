@@ -130,8 +130,9 @@ public class BrowserController implements Initializable{
 		}
 		else {
 			String path = list.get(0).obtainPreviosDirectory();
-			updateLabel(path);
 			setList(browsingClient.browserRequest(path));
+			updateLabel(list.get(0).getPath().
+					substring(0, list.get(0).getPath().lastIndexOf(list.get(0).getName())));
 		}
 		fileTable.setItems(list);
 	}

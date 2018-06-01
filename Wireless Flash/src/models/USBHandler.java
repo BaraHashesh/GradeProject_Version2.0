@@ -19,8 +19,9 @@ public class USBHandler{
 	 * @return list of files in a directory
 	 */
 	public static MyFile[] fileLister(String folderURL){
-		if(folderURL.compareTo("") == 0)
+		if(folderURL.length() < ROOT.length())
 			folderURL = ROOT;
+		
 		File folder = new File(folderURL);
 		if(folder.exists()) 
 			return MyFile.parseFile(folder.listFiles());
@@ -80,9 +81,6 @@ public class USBHandler{
 		
 		if(path.compareTo(ROOT) != 0)
 			path = path + "\\";
-		
-		if(path.length() < ROOT.length())
-			path = ROOT;
 		
 		try {
 		}catch(Exception e) {
